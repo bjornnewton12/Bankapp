@@ -1,6 +1,16 @@
-namespace BlazorStandaloneApp.Interfaces;
 
-public interface IAccountService
+namespace BlazorStandaloneApp.Services;
+
+public class AccountService : IAccountService
 {
-    IBankAccount CreateAccount(string name, string currency, decimal initialBalance);
+    public IBankAccount CreateAccount(string name, string currency, decimal initialBalance)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<IBankAccount> GetAccounts()
+    {
+        throw new NotImplementedException();
+    }
 }
+
