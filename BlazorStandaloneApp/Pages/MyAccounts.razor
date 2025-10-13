@@ -1,59 +1,28 @@
-@page "/accounts"
+@page "/myAccounts"
 @inject IAccountService AccountService;
 @using BlazorStandaloneApp.Domain
 
-<PageTitle>New account</PageTitle>
+<PageTitle>My accounts</PageTitle>
 
-<h1>New account</h1>
+<h1>My accounts</h1>
 
-<EditForm Model="_model" OnValidSubmit="CreateAccountAsync">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="form-row">
-        <label>Account name</label>
-        <InputText @bind-Value="_model.Name" />
-    </div>
-    <div class="form-row">
-        <label>Account type</label> 
-        <InputSelect @bind-Value="_model.AccountType">
-            <option value="">Select account type</option>
-            <option value="@AccountType.Deposit">Deposit account</option>
-            <option value="@AccountType.Savings">Savings account</option>
-        </InputSelect>
-    </div>
-
-    <div class="form-row">
-        <label>Currency</label>
-        <InputText @bind-Value="_model.Currency"></InputText>
-    </div>
-
-    <div class="form-row">
-        <label>Starting balance</label>
-        <InputNumber @bind-Value="_model.InitialBalance"></InputNumber>
-    </div>
-
-    <button type="submit" class="btn-submit">Create account</button>
-</EditForm>
-
-<!--- Lägg till alla konton --->
-
-<h4>All accounts</h4>
 @if(_accounts.Count == 0)
 {
-    <p>There are no accounts, create your first</p>
+    <p>Det finns inga konton, registrera ditt första</p>
 }
 else
 {
-    <ul>
+    <p>
         @foreach (var account in _accounts)
         {
-            <li>
+            <p>
             <strong>@account.Name</strong> - @account.AccountType - @account.Balance @account.Currency
             <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
-            </li>
+            </p>
         }
-    </ul>
+    </p>
 }
+
 
 @code {
     private CreateAccountModel _model = new();

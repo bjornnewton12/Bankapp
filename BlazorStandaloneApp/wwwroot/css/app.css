@@ -128,9 +128,9 @@ code {
 }
 
 .form-row label {
-    display: block;       /* ensures the label is on its own line */
-    margin-bottom: 0.5rem; /* adjust the space below the label */
-    font-weight: 500;      /* optional: make the label text a bit bolder */
+    display: block;       
+    margin-bottom: 0.5rem; 
+    font-weight: 500;      
     color: black;
 }
 
@@ -155,4 +155,5 @@ h1 {
     font-weight: 800;
     font-size: 300%;
     letter-spacing: -0.01em;
+    margin-bottom: 2rem;
 }
