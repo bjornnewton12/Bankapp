@@ -13,6 +13,7 @@
         <label>Account name</label>
         <InputText @bind-Value="_model.Name" />
     </div>
+    
     <div class="form-row">
         <label>Account type</label> 
         <InputSelect @bind-Value="_model.AccountType">
@@ -37,10 +38,10 @@
 
 <!--- Lägg till alla konton --->
 
-<h4>All accounts</h4>
+<h4>Recently added accounts</h4>
 @if(_accounts.Count == 0)
 {
-    <p>There are no accounts, create your first</p>
+    <p>There are no accounts, create your first.</p>
 }
 else
 {
@@ -72,7 +73,6 @@ else
             _model.AccountType,
             _model.Currency,
             _model.InitialBalance);
-
             _accounts = AccountService.GetAccounts().ToList();
             _model.Clear();
         }
