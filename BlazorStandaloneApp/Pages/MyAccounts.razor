@@ -8,7 +8,7 @@
 
 @if(_accounts.Count == 0)
 {
-    <p>There are no accounts, create your first under New account</p>
+    <p>There are no accounts, create your first under New account.</p>
 }
 else
 {
@@ -27,13 +27,12 @@ else
 @code {
     private CreateAccountModel _model = new();
     private List<IBankAccount> _accounts = new();
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        _accounts = AccountService.GetAccounts().ToList();
-        base.OnInitialized();
+        _accounts = await AccountService.GetAccounts();
     }
 
-    private Task CreateAccountAsync()
+    private async Task CreateAccountAsync()
     {
         try{
             AccountService.CreateAccount(
@@ -42,14 +41,13 @@ else
             _model.Currency,
             _model.InitialBalance);
 
-            _accounts = AccountService.GetAccounts().ToList();
+            _accounts = await AccountService.GetAccounts();
             _model.Clear();
         }
         catch (Exception exception)
         {
             Console.WriteLine(exception);
         }
-        return Task.CompletedTask;  
     }
 
     private class CreateAccountModel

@@ -1,6 +1,7 @@
 @page "/accounts"
 @inject IAccountService AccountService;
 @using BlazorStandaloneApp.Domain
+@using System.ComponentModel.DataAnnotations
 
 <PageTitle>New account</PageTitle>
 
@@ -13,7 +14,7 @@
         <label>Account name</label>
         <InputText @bind-Value="_model.Name" />
     </div>
-    
+
     <div class="form-row">
         <label>Account type</label> 
         <InputSelect @bind-Value="_model.AccountType">
@@ -59,13 +60,12 @@ else
 @code {
     private CreateAccountModel _model = new();
     private List<IBankAccount> _accounts = new();
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        _accounts = AccountService.GetAccounts().ToList();
-        base.OnInitialized();
+        _accounts = await AccountService.GetAccounts();
     }
 
-    private Task CreateAccountAsync()
+    private async Task CreateAccountAsync()
     {
         try{
             AccountService.CreateAccount(
@@ -73,18 +73,19 @@ else
             _model.AccountType,
             _model.Currency,
             _model.InitialBalance);
-            _accounts = AccountService.GetAccounts().ToList();
+            _accounts = await AccountService.GetAccounts();
             _model.Clear();
+            StateHasChanged();
         }
         catch (Exception exception)
         {
             Console.WriteLine(exception);
         }
-        return Task.CompletedTask;  
     }
 
     private class CreateAccountModel
     {
+        [Required(ErrorMessage = "Please add an account name")]
         public string? Name { get; set; }
         public AccountType AccountType { get; set; }
         public string? Currency { get; set; } = "SEK";
