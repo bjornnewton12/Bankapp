@@ -11,12 +11,11 @@
 <EditForm Model="_model" OnValidSubmit="CreateAccountAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div className="mb-2">
+    <div class="form-row">
         <label>Account name</label>
         <InputText @bind-Value="_model.Name" />
     </div>
-
-    <div className="mb-2">
+    <div class="form-row">
         <label>Account type</label> 
         <InputSelect @bind-Value="_model.AccountType">
             <option value="">Select account type</option>
@@ -25,17 +24,17 @@
         </InputSelect>
     </div>
 
-    <div className="mb-2">
+    <div class="form-row">
         <label>Currency</label>
         <InputText @bind-Value="_model.Currency"></InputText>
     </div>
 
-    <div className="mb-2">
+    <div class="form-row">
         <label>Starting balance</label>
         <InputNumber @bind-Value="_model.InitialBalance"></InputNumber>
     </div>
 
-    <button type="submit">Create account</button>
+    <button type="submit" class="btn-submit">Create account</button>
 </EditForm>
 
 <!--- Lägg till alla konton --->
