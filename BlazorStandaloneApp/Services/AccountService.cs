@@ -41,5 +41,17 @@ namespace BlazorStandaloneApp.Services
             await IsInitialized();
             return _accounts.Cast<IBankAccount>().ToList();
         }
+
+        public async Task DeleteAccount(IBankAccount account)
+        {
+            await IsInitialized();
+
+            var accountToRemove = _accounts.FirstOrDefault(a => a.Id == account.Id);
+            if (accountToRemove != null)
+            {
+                _accounts.Remove(accountToRemove);
+                await SaveAsync();
+            }
+        }
     }
 }
