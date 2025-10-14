@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">BlazorStandaloneApp</a>
+        <a class="navbar-brand" href="">BK Bank</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,24 +11,37 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="myAccounts">
+                <span class="bi bi-wallet" aria-hidden="true"></span> My accounts
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="accounts">
-                <span class="bi bi-wallet" aria-hidden="true"></span> Accounts
+                <span class="bi bi-plus-circle" aria-hidden="true"></span> New account
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="newTransaction">
-                <span class="bi bi-plus-circle" aria-hidden="true"></span> New Transaction
+                <span class="bi bi-database" aria-hidden="true"></span> New Transaction
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="history">
-                <span class="bi bi-receipt" aria-hidden="true"></span> History
+                <span class="bi bi-clock-history" aria-hidden="true"></span> History
             </NavLink>
         </div>
+        <div class="nav-item px-3">
+            <a class="nav-link" href="https://learn.microsoft.com/aspnet/core/" target="_blank" rel="noopener noreferrer">
+                <span class="bi bi-info-circle" aria-hidden="true"></span> About (External link)
+            </a>
+        </div>
+
+        
+
     </nav>
 </div>
 
