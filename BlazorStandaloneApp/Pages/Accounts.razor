@@ -68,7 +68,7 @@ else
     private async Task CreateAccountAsync()
     {
         try{
-            AccountService.CreateAccount(
+            await AccountService.CreateAccount(
             _model.Name,
             _model.AccountType,
             _model.Currency,
