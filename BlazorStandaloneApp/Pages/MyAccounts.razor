@@ -12,15 +12,36 @@
 }
 else
 {
-    <p>
+    <table class="accounts-table">
+        <thead>
+            <tr>
+                <th>Account name</th>
+                <th>Account type</th>
+                <th>Balance</th>
+                <th>Currency</th>
+                <th>Last updated</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
         @foreach (var account in _accounts)
         {
-            <p>
-            <strong>@account.Name</strong> - @account.AccountType - @account.Balance @account.Currency
-            <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
-            </p>
+            <tr>
+                <td>@account.Name</td>
+                <td>@account.AccountType</td>
+                <td>@account.Balance</td>
+                <td>@account.Currency</td>
+                <td>@account.LastUpdated.ToLocalTime()</td>
+                <td>
+                @if (account.Balance == 0)
+                    {
+                        <button class="remove-btn" @onclick="() => RemoveAccount(account)">Remove</button>
+                    }
+                </td>
+            </tr>
         }
-    </p>
+        </tbody>
+    </table>
 }
 
 
@@ -47,6 +68,19 @@ else
         catch (Exception exception)
         {
             Console.WriteLine(exception);
+        }
+    }
+
+    private async Task RemoveAccount(IBankAccount account)
+    {
+        try
+        {
+            await AccountService.DeleteAccount(account);
+            _accounts = await AccountService.GetAccounts();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error");
         }
     }
 
