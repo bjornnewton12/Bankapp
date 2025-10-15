@@ -1,5 +1,113 @@
 @page "/newTransaction"
+@inject IAccountService AccountService;
+@inject ITransactionService TransactionService;
+@using BlazorStandaloneApp.Domain
+@using System.ComponentModel.DataAnnotations
+@using BlazorStandaloneApp.Interfaces;
 
-<PageTitle>New Transaction</PageTitle>
+<PageTitle>New transaction</PageTitle>
 
-<h1>New Transaction</h1>
+<h1>New transaction</h1>
+
+<EditForm Model="_model" OnValidSubmit="CreateTransactionAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-row">
+        <label>From account</label> 
+        <InputSelect @bind-Value="_model.FromAccountId">
+            <option value="">Select account</option>
+            @foreach (var account in _accounts)
+            {
+                <option value="@account.Id.ToString()">@account.Name</option>
+            } 
+        </InputSelect>
+    </div>
+
+    <div class="form-row">
+    <label>To account</label>
+    <InputSelect @bind-Value="_model.ToAccountId">
+        <option value="">Select account</option>
+        @foreach (var account in _accounts)
+        {
+            <option value="@account.Id.ToString()">@account.Name</option>
+        }
+    </InputSelect>
+    </div>
+
+
+    <div class="form-row">
+        <label>Amount</label>
+        <InputNumber @bind-Value="_model.Amount" />
+    </div>
+<button type="submit" class="btn-submit">Create transaction</button>
+</EditForm>
+
+<!--- Lägg till alla konton --->
+
+<h4>Transaction history</h4>
+@if(_transactions.Count == 0)
+{
+    <p>There are no transactions, make your first.</p>
+}
+else
+{
+    <ul>
+        @foreach (var tx in _transactions)
+        {
+            <li>
+            <strong>@tx.FromAccountName</strong> to <strong>@tx.ToAccountName</strong>
+            <small>(uppdaterad @tx.LastUpdated.ToLocalTime())</small>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private CreateTransactionModel _model = new();
+    private List<IBankAccount> _accounts = new();
+    private List<ITransaction> _transactions = new();
+
+     protected override async Task OnInitializedAsync()
+    {
+        _accounts = await AccountService.GetAccounts();
+        _transactions = await TransactionService.GetTransactions();
+    }
+
+        private async Task CreateTransactionAsync()
+    {
+        try{
+
+            Console.WriteLine($"DEBUG: From={_model.FromAccountId}, To={_model.ToAccountId}");
+
+            await TransactionService.CreateTransaction(
+            _model.FromAccountId,
+            _model.ToAccountId,
+            _model.Amount); // Vad ska jag göra här?
+            _transactions = await TransactionService.GetTransactions();
+            _model.Clear();
+            StateHasChanged();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
+        }
+    }
+
+    private class CreateTransactionModel
+    {
+        [Required(ErrorMessage = "Select an account")]
+        public string? FromAccountId { get; set; }
+
+        [Required(ErrorMessage = "Select an account")]
+        public string? ToAccountId { get; set; }
+
+        [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than zero")]
+        public decimal Amount { get; set; }
+
+        public void Clear()
+        {
+            FromAccountId = ToAccountId = string.Empty;
+            Amount = 0;
+        }
+    }
+}

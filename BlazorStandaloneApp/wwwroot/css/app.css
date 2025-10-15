@@ -107,6 +107,7 @@ code {
 /* Jag har lagt till */
 
 /* Forms */
+
 .form-row {
     margin-bottom: 0.5rem;
 }
@@ -135,6 +136,7 @@ code {
 }
 
 /* Knappar */
+
 .btn-submit {
     background-color: #306D66;
     color: white;
@@ -180,6 +182,10 @@ code {
 
 .accounts-table th {
     font-weight: 600;
+}
+
+.accounts-table tr {
+    padding: 4px 0;
 }
 
 .accounts-table tbody tr {

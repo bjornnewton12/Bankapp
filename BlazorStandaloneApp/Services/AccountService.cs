@@ -53,5 +53,26 @@ namespace BlazorStandaloneApp.Services
                 await SaveAsync();
             }
         }
+        public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
+        {
+            await IsInitialized();
+
+            var fromAccount = _accounts.FirstOrDefault(a => a.Id == fromAccountId) as BankAccount;
+            var toAccount = _accounts.FirstOrDefault(a => a.Id == toAccountId) as BankAccount;
+
+            if (fromAccount == null || toAccount == null)
+                throw new Exception("One or both accounts could not be found.");
+
+            if (amount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than zero.");
+
+            if (fromAccount.Balance < amount)
+                throw new InvalidOperationException("Insufficient funds in the source account.");
+            
+            fromAccount.AdjustBalance(-amount);
+            toAccount.AdjustBalance(amount);
+
+            await SaveAsync();
+        }
     }
 }

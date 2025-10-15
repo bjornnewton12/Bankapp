@@ -57,9 +57,9 @@ else
     {
         try{
             await AccountService.CreateAccount(
-            _model.Name,
+            _model.Name, // Vad ska jag göra här?
             _model.AccountType,
-            _model.Currency,
+            _model.Currency, // Vad ska jag göra här?
             _model.InitialBalance);
 
             _accounts = await AccountService.GetAccounts();
@@ -78,9 +78,9 @@ else
             await AccountService.DeleteAccount(account);
             _accounts = await AccountService.GetAccounts();
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            Console.WriteLine("Error");
+            Console.WriteLine(exception);
         }
     }
 

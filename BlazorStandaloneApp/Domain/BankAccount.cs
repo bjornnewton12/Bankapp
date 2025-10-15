@@ -44,4 +44,10 @@ public class BankAccount : IBankAccount
     {
         throw new NotImplementedException();
     }
+
+    public void AdjustBalance(decimal amount)
+    {
+        Balance += amount;
+        LastUpdated = DateTime.UtcNow;
+    }
 }
