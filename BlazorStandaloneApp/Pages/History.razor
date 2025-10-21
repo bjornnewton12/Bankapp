@@ -1,5 +1,36 @@
 @page "/history"
 
+@* 
+@inject IAccountService AccountService;
+@using BlazorStandaloneApp.Domain
+
 <PageTitle>History</PageTitle>
 
 <h1>History</h1>
+
+    <table class="accounts-table">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Amount</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Account Balance</th>
+                <th>Last updated</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var account in _accounts)
+        {
+            <tr>
+                <td>@account.TransactionType</td>
+                <td>@account.Amount Currency</td>
+                <td>@account.FromAccountId || Withdraw</td>
+                <td>@account.ToAccountId || Deposit</td>
+                <td>@account.Balance</td>
+                <td>@account.LastUpdated.ToLocalTime()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+ *@

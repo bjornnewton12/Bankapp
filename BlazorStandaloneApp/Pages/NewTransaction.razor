@@ -1,15 +1,20 @@
 @page "/newTransaction"
-@inject IAccountService AccountService;
-@inject ITransactionService TransactionService;
 @using BlazorStandaloneApp.Domain
-@using System.ComponentModel.DataAnnotations
-@using BlazorStandaloneApp.Interfaces;
+@using BlazorStandaloneApp.Interfaces
+@using BlazorStandaloneApp.Services
+@inject IAccountService AccountService;
 
 <PageTitle>New transaction</PageTitle>
 
 <h1>New transaction</h1>
+@if (_accounts == null || _accounts.Any())
+{
+    <p>You need at least 2 accounts to make a transaction</p>
+}
 
-<EditForm Model="_model" OnValidSubmit="CreateTransactionAsync">
+
+
+<EditForm Model="_model" OnValidSubmit="OnSubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="form-row">
@@ -34,80 +39,99 @@
     </InputSelect>
     </div>
 
-
     <div class="form-row">
         <label>Amount</label>
-        <InputNumber @bind-Value="_model.Amount" />
+        <InputNumber TValue="decimal" @bind-Value="_model.Amount"></InputNumber>
     </div>
-<button type="submit" class="btn-submit">Create transaction</button>
+
+    <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 
-<!--- Lägg till alla konton --->
+<!--- Add accounts --->
 
 <h4>Transaction history</h4>
-@if(_transactions.Count == 0)
-{
-    <p>There are no transactions, make your first.</p>
-}
-else
-{
     <ul>
-        @foreach (var tx in _transactions)
+        @foreach (var account in _accounts)
         {
             <li>
-            <strong>@tx.FromAccountName</strong> to <strong>@tx.ToAccountName</strong>
-            <small>(uppdaterad @tx.LastUpdated.ToLocalTime())</small>
+            <strong>@account.Name</strong>: <strong>@account.Balance</strong>
+            <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
             </li>
         }
     </ul>
-}
 
 @code {
-    private CreateTransactionModel _model = new();
-    private List<IBankAccount> _accounts = new();
-    private List<ITransaction> _transactions = new();
+    private readonly TransferFormModel _model = new();
+    private List<BankAccount> _accounts = new();
+    private List<BankAccount> _toAccounts= new();
 
-     protected override async Task OnInitializedAsync()
+    private class TransferFormModel
     {
-        _accounts = await AccountService.GetAccounts();
-        _transactions = await TransactionService.GetTransactions();
+        public Guid FromAccountId { get; set; }
+        public Guid ToAccountId { get; set; }
+        public decimal Amount { get; set; }
     }
 
-        private async Task CreateTransactionAsync()
+    protected override async void OnInitialized()
     {
-        try{
+        _accounts = await  AccountService.GetAccounts();
+        _toAccounts = _accounts;
+    }
 
-            Console.WriteLine($"DEBUG: From={_model.FromAccountId}, To={_model.ToAccountId}");
+    private async Task OnSubmitAsync()
+    {
+        if (_model.FromAccountId == Guid.Empty || _model.ToAccountId == Guid.Empty)
+        {
+            StateHasChanged();
+            return;
+        }
+        if (_model.FromAccountId == _model.ToAccountId)
+        {
+            StateHasChanged();
+            return;
+        }
 
-            await TransactionService.CreateTransaction(
-            _model.FromAccountId,
-            _model.ToAccountId,
-            _model.Amount); // Vad ska jag göra här?
-            _transactions = await TransactionService.GetTransactions();
-            _model.Clear();
+        try
+        {
+            AccountService.Transfer(_model.FromAccountId, _model.ToAccountId, _model.Amount);
+
+            // Uppdatera vår lista
+            _accounts = await AccountService.GetAccounts();
+
+            // Visa bekräftelse
+            var from = _accounts.First(x => x.Id == _model.FromAccountId);
+            var to = _accounts.First(x => x.Id == _model.ToAccountId);
+
+            _model.Amount = 0;
             StateHasChanged();
         }
         catch (Exception exception)
         {
-            Console.WriteLine(exception);
+            Console.WriteLine(exception.Message);
         }
-    }
+        return;
+    }    
 
-    private class CreateTransactionModel
-    {
-        [Required(ErrorMessage = "Select an account")]
-        public string? FromAccountId { get; set; }
-
-        [Required(ErrorMessage = "Select an account")]
-        public string? ToAccountId { get; set; }
-
-        [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than zero")]
-        public decimal Amount { get; set; }
-
-        public void Clear()
+        private void HandleFormChanged(ChangeEventArgs eventArgs)
         {
-            FromAccountId = ToAccountId = string.Empty;
-            Amount = 0;
+            if (Guid.TryParse(eventArgs.Value?.ToString(), out var id))
+            {
+                OnFormChanged(id);
+            }
         }
-    }
+
+        private void OnFormChanged(Guid fromId)
+        {
+            _model.FromAccountId = fromId;
+            var from = _accounts.FirstOrDefault(x => x.Id == fromId);
+            if (from != null)
+            {
+                _toAccounts = _accounts.Where(account => account.Id != fromId).ToList();
+            }
+            else
+            {
+                _accounts = _accounts.ToList();
+            }
+            _model.ToAccountId = Guid.Empty;
+        }   
 }

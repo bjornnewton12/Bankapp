@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using BlazorStandaloneApp.Domain;
+using BlazorStandaloneApp.Interfaces;
 
 namespace BlazorStandaloneApp.Services
 {
@@ -6,7 +11,7 @@ namespace BlazorStandaloneApp.Services
     public class AccountService : IAccountService
     {
         private const string StorageKey = "BlazorStandaloneApp.accounts";
-        private readonly List<IBankAccount> _accounts = new();
+        private readonly List<BankAccount> _accounts = new();
         private readonly IStorageService _storageService;
         private bool isLoaded;
 
@@ -27,19 +32,19 @@ namespace BlazorStandaloneApp.Services
 
         private Task SaveAsync() => _storageService.SetItemAsync(StorageKey, _accounts);
 
-        public async Task<IBankAccount> CreateAccount(string name, AccountType accountType, string currency, decimal initialBalance)
+        public async Task<BankAccount> CreateAccount(string name, AccountType accountType, CurrencyType currencyType, decimal initialBalance)
         {
             await IsInitialized();
-            var account = new BankAccount(name, accountType, currency, initialBalance);
+            var account = new BankAccount(name, accountType, currencyType, initialBalance);
             _accounts.Add(account);
             await SaveAsync();
             return account;
         }
 
-        public async Task<List<IBankAccount>> GetAccounts()
+        public async Task<List<BankAccount>> GetAccounts()
         {
             await IsInitialized();
-            return _accounts.Cast<IBankAccount>().ToList();
+            return _accounts.Cast<BankAccount>().ToList();
         }
 
         public async Task DeleteAccount(IBankAccount account)
@@ -53,26 +58,13 @@ namespace BlazorStandaloneApp.Services
                 await SaveAsync();
             }
         }
-        public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
+
+        public void Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
         {
-            await IsInitialized();
+            var fromAccount = _accounts.FirstOrDefault(x => x.Id == fromAccountId);
+            var toAccount = _accounts.FirstOrDefault(y => y.Id == toAccountId);
 
-            var fromAccount = _accounts.FirstOrDefault(a => a.Id == fromAccountId) as BankAccount;
-            var toAccount = _accounts.FirstOrDefault(a => a.Id == toAccountId) as BankAccount;
-
-            if (fromAccount == null || toAccount == null)
-                throw new Exception("One or both accounts could not be found.");
-
-            if (amount <= 0)
-                throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than zero.");
-
-            if (fromAccount.Balance < amount)
-                throw new InvalidOperationException("Insufficient funds in the source account.");
-            
-            fromAccount.AdjustBalance(-amount);
-            toAccount.AdjustBalance(amount);
-
-            await SaveAsync();
+            fromAccount.TransferTo(toAccount, amount);
         }
     }
 }

@@ -217,3 +217,11 @@ h1 {
     letter-spacing: -0.01em;
     margin-bottom: 2rem;
 }
+
+/* Images */
+
+.header img {
+    width: 100%;
+    height: auto;
+    display: block;
+}

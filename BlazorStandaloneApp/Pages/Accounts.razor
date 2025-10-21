@@ -26,7 +26,12 @@
 
     <div class="form-row">
         <label>Currency</label>
-        <InputText @bind-Value="_model.Currency"></InputText>
+        <InputSelect @bind-Value="_model.CurrencyType">
+            <option value="">Select curreny</option>
+            <option value="@CurrencyType.SEK">SEK</option>
+            <option value="@CurrencyType.Euro">£</option>
+            <option value="@CurrencyType.Dollar">$</option>
+        </InputSelect>
     </div>
 
     <div class="form-row">
@@ -50,7 +55,7 @@ else
         @foreach (var account in _accounts)
         {
             <li>
-            <strong>@account.Name</strong> - @account.AccountType - @account.Balance @account.Currency
+            <strong>@account.Name</strong> - @account.AccountType - @account.Balance @account.CurrencyType
             <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
             </li>
         }
@@ -59,7 +64,7 @@ else
 
 @code {
     private CreateAccountModel _model = new();
-    private List<IBankAccount> _accounts = new();
+    private List<BankAccount> _accounts = new();
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
@@ -71,7 +76,7 @@ else
             await AccountService.CreateAccount(
             _model.Name, // Vad ska jag göra här?
             _model.AccountType,
-            _model.Currency, // Vad ska jag göra här?
+            _model.CurrencyType,
             _model.InitialBalance);
             _accounts = await AccountService.GetAccounts();
             _model.Clear();
@@ -88,13 +93,13 @@ else
         [Required(ErrorMessage = "Please add an account name")]
         public string? Name { get; set; }
         public AccountType AccountType { get; set; }
-        public string? Currency { get; set; } = "SEK";
+        public CurrencyType CurrencyType { get; set; }
         public decimal InitialBalance { get; set; } = 0;
 
         public void Clear()
         {
             Name = string.Empty;
-            Currency = "SEK";
+            CurrencyType = default;
             InitialBalance = 0;
             AccountType = default;
         }

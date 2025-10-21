@@ -1,38 +1,43 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using BlazorStandaloneApp.Interfaces;
+
 namespace BlazorStandaloneApp.Domain;
 
 public class BankAccount : IBankAccount
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
     public AccountType AccountType { get; private set; }
+    public CurrencyType CurrencyType { get; private set; }
 
     public string Name { get; private set; }
 
-    public string Currency { get; private set; }
 
     public decimal Balance { get; private set; }
 
     public DateTime LastUpdated { get; private set; }
 
-    public BankAccount(string name, AccountType accountType, string currency, decimal balance)
+    private readonly List<Transaction> _transaction = new();
+
+    public BankAccount(string name, AccountType accountType, CurrencyType currencyType, decimal balance)
     {
         Name = name;
         AccountType = accountType;
-        Currency = currency;
+        CurrencyType = currencyType;
         Balance = balance;
         LastUpdated = DateTime.Now;
     }
 
     [JsonConstructor]
-    public BankAccount(Guid id, string name, AccountType accountType, string currency, decimal balance, DateTime lastUpdated)
+    public BankAccount(Guid id, string name, AccountType accountType, CurrencyType currencyType, decimal balance, DateTime lastUpdated)
     {
         Id = id;
         Name = name;
         AccountType = accountType;
-        Currency = currency;
+        CurrencyType = currencyType;
         Balance = balance;
-        LastUpdated = DateTime.Now;
+        LastUpdated = lastUpdated;
     }
 
     public void Deposit(decimal amount)
@@ -45,9 +50,32 @@ public class BankAccount : IBankAccount
         throw new NotImplementedException();
     }
 
-    public void AdjustBalance(decimal amount)
+    public void TransferTo(BankAccount toAccount, decimal amount)
     {
-        Balance += amount;
-        LastUpdated = DateTime.UtcNow;
+        // Från vilket konto
+        Balance -= amount;
+        LastUpdated = DateTime.Now;
+        _transaction.Add(new Transaction
+        {
+            Type = TransactionType.TransferOut,
+            Amount = amount,
+            FromAccount = Id,
+            ToAccount = toAccount.Id
+        });
+        // till vilket konto
+
+        toAccount.Balance += amount;
+        toAccount.LastUpdated = DateTime.UtcNow;
+        toAccount._transaction.Add(new Transaction
+
+        {
+            Type = TransactionType.TransferIn,
+            Amount = amount,
+            FromAccount = Id,
+        });
     }
+
+    
+
+
 }

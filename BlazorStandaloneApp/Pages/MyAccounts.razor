@@ -30,7 +30,7 @@ else
                 <td>@account.Name</td>
                 <td>@account.AccountType</td>
                 <td>@account.Balance</td>
-                <td>@account.Currency</td>
+                <td>@account.CurrencyType</td>
                 <td>@account.LastUpdated.ToLocalTime()</td>
                 <td>
                 @if (account.Balance == 0)
@@ -47,7 +47,7 @@ else
 
 @code {
     private CreateAccountModel _model = new();
-    private List<IBankAccount> _accounts = new();
+    private List<BankAccount> _accounts = new();
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
@@ -59,7 +59,7 @@ else
             await AccountService.CreateAccount(
             _model.Name, // Vad ska jag göra här?
             _model.AccountType,
-            _model.Currency, // Vad ska jag göra här?
+            _model.CurrencyType, // Vad ska jag göra här?
             _model.InitialBalance);
 
             _accounts = await AccountService.GetAccounts();
@@ -88,13 +88,13 @@ else
     {
         public string? Name { get; set; }
         public AccountType AccountType { get; set; }
-        public string? Currency { get; set; } = "SEK";
+        public CurrencyType CurrencyType { get; set; }
         public decimal InitialBalance { get; set; } = 0;
 
         public void Clear()
         {
             Name = string.Empty;
-            Currency = "SEK";
+            CurrencyType = default;
             InitialBalance = 0;
             AccountType = default;
         }
