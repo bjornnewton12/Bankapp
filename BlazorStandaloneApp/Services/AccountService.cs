@@ -59,12 +59,24 @@ namespace BlazorStandaloneApp.Services
             }
         }
 
-        public void Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
+        // Chat: Changed from public void to public async Task
+        public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
         {
             var fromAccount = _accounts.FirstOrDefault(x => x.Id == fromAccountId);
             var toAccount = _accounts.FirstOrDefault(y => y.Id == toAccountId);
 
             fromAccount.TransferTo(toAccount, amount);
+
+            // Chat: Added this:
+            var allTransactions = _accounts
+            .SelectMany(a => a.GetTransactions())
+            .ToList();
+
+            // Save them in LocalStorage for the History page
+            await _storageService.SetItemAsync("transactions", allTransactions);
+
+            // Also save accounts to keep balances updated
+            await SaveAsync();
         }
     }
 }

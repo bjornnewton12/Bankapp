@@ -20,15 +20,15 @@
             </tr>
         </thead>
         <tbody> 
-        @foreach (var account in _accounts)
+        @foreach (var transaction in _transactions)
         {
             <tr>
-                <td>@account.TransactionType</td>
-                <td>@account.Amount Currency</td>
-                <td>@account.FromAccountId || Withdraw</td>
-                <td>@account.ToAccountId || Deposit</td>
-                <td>@account.Balance</td>
-                <td>@account.LastUpdated.ToLocalTime()</td>
+                <td>@transaction.Type</td>
+                <td>@transaction.Amount</td>
+                <td>@GetAccountName(transaction.FromAccount)</td>
+                <td>@GetAccountName(transaction.ToAccount)</td>
+                <td>@transaction.BalanceAfterTransaction</td>
+                <td>@transaction.DateTime.ToLocalTime()</td>
             </tr>
         }
         </tbody>
@@ -44,4 +44,16 @@
         _accounts = await AccountService.GetAccounts();
         _transactions = await StorageService.GetItemAsync<List<Transaction>>("transactions") ?? new List<Transaction>();
     }
+
+
+    // Chat: find the names by ID
+
+    private string GetAccountName(Guid? accountId)
+{
+    if (accountId == null)
+        return "-"; // for transactions without one (e.g. deposits)
+
+    var account = _accounts.FirstOrDefault(a => a.Id == accountId);
+    return account?.Name ?? accountId.ToString(); // fallback to ID if missing
+}
 }

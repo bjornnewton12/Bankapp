@@ -2,7 +2,7 @@
 @using BlazorStandaloneApp.Domain
 @using BlazorStandaloneApp.Interfaces
 @using BlazorStandaloneApp.Services
-@inject IAccountService AccountService;
+@inject IAccountService AccountService
 
 <PageTitle>New transaction</PageTitle>
 
@@ -63,9 +63,18 @@
         public decimal Amount { get; set; }
     }
 
+    //Chat: replace protected override async void OnInitialized() with the one just below
+    @*
     protected override async void OnInitialized()
     {
         _accounts = await  AccountService.GetAccounts();
+        _toAccounts = _accounts;
+    }
+    *@
+
+    protected override async Task OnInitializedAsync()
+    {
+        _accounts = await AccountService.GetAccounts();
         _toAccounts = _accounts;
     }
 
@@ -84,7 +93,8 @@
 
         try
         {
-            AccountService.Transfer(_model.FromAccountId, _model.ToAccountId, _model.Amount);
+            // Chat: Added await method
+            await AccountService.Transfer(_model.FromAccountId, _model.ToAccountId, _model.Amount);
 
             // Uppdatera vår lista
             _accounts = await AccountService.GetAccounts();

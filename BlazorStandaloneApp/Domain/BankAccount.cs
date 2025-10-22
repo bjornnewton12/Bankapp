@@ -20,6 +20,13 @@ public class BankAccount : IBankAccount
 
     private readonly List<Transaction> _transaction = new();
 
+    // Chat: Added this list
+
+    public List<Transaction> GetTransactions()
+    {
+        return _transaction;
+    }
+
     public BankAccount(string name, AccountType accountType, CurrencyType currencyType, decimal balance)
     {
         Name = name;
@@ -60,7 +67,9 @@ public class BankAccount : IBankAccount
             Type = TransactionType.TransferOut,
             Amount = amount,
             FromAccount = Id,
-            ToAccount = toAccount.Id
+            ToAccount = toAccount.Id,
+            DateTime = DateTime.Now,
+            BalanceAfterTransaction = toAccount.Balance
         });
         // till vilket konto
 
@@ -72,6 +81,8 @@ public class BankAccount : IBankAccount
             Type = TransactionType.TransferIn,
             Amount = amount,
             FromAccount = Id,
+            DateTime = DateTime.Now,
+            BalanceAfterTransaction = toAccount.Balance
         });
     }
 
