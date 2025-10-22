@@ -1,8 +1,8 @@
 @page "/history"
-
-
 @inject IAccountService AccountService;
+@inject IStorageService StorageService;
 @using BlazorStandaloneApp.Domain
+
 
 <PageTitle>History</PageTitle>
 
@@ -19,7 +19,7 @@
                 <th>Last updated</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody> 
         @foreach (var account in _accounts)
         {
             <tr>
@@ -34,4 +34,14 @@
         </tbody>
     </table>
 
-    
+
+@code
+{
+    private List<BankAccount> _accounts = new();
+    private List<Transaction> _transactions = new();
+     protected override async Task OnInitializedAsync()
+    {
+        _accounts = await AccountService.GetAccounts();
+        _transactions = await StorageService.GetItemAsync<List<Transaction>>("transactions") ?? new List<Transaction>();
+    }
+}

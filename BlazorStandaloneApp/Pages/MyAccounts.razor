@@ -59,7 +59,7 @@ else
             await AccountService.CreateAccount(
             _model.Name, // Vad ska jag göra här?
             _model.AccountType,
-            _model.CurrencyType, // Vad ska jag göra här?
+            _model.CurrencyType,
             _model.InitialBalance);
 
             _accounts = await AccountService.GetAccounts();

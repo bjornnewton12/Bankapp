@@ -7,13 +7,6 @@
 <PageTitle>New transaction</PageTitle>
 
 <h1>New transaction</h1>
-@if (_accounts == null || _accounts.Any())
-{
-    <p>You need at least 2 accounts to make a transaction</p>
-}
-
-
-
 <EditForm Model="_model" OnValidSubmit="OnSubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -47,9 +40,7 @@
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 
-<!--- Add accounts --->
-
-<h4>Transaction history</h4>
+<h4>Account balance</h4>
     <ul>
         @foreach (var account in _accounts)
         {
