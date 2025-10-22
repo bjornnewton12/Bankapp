@@ -68,20 +68,19 @@ public class BankAccount : IBankAccount
             Amount = amount,
             FromAccount = Id,
             ToAccount = toAccount.Id,
-            DateTime = DateTime.Now,
-            BalanceAfterTransaction = toAccount.Balance
+            DateTime = DateTime.UtcNow,
+            BalanceAfterTransaction = Balance
         });
         // till vilket konto
-
         toAccount.Balance += amount;
         toAccount.LastUpdated = DateTime.UtcNow;
         toAccount._transaction.Add(new Transaction
-
         {
             Type = TransactionType.TransferIn,
             Amount = amount,
             FromAccount = Id,
-            DateTime = DateTime.Now,
+            ToAccount = toAccount.Id,
+            DateTime = DateTime.UtcNow,
             BalanceAfterTransaction = toAccount.Balance
         });
     }
