@@ -119,7 +119,7 @@ code {
     border: none;
     height: 2.2rem;
     padding: 0.3rem 0.3rem 0.3rem 0.5rem;
-    width: 250px; 
+    width: 300px; 
 }
 
 .form-row select {
@@ -127,7 +127,7 @@ code {
     border: none;
     height: 2.2rem;
     padding: 0.3rem 0.3rem 0.3rem 0.5rem; 
-    width: 250px; 
+    width: 300px; 
 }
 
 .form-row label {
@@ -168,6 +168,16 @@ code {
 .remove-btn:hover {
     background-color: #b02a37;
 }
+
+/* Sort */
+.btn-sort {
+    background-color: #abdfd0;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding-left: calc(var(--original-padding-left, 0px) - 5px);
+}
+
 
 /* Table */
 
@@ -212,6 +222,8 @@ code {
     gap: 20px;
     flex-wrap: wrap;
 }
+
+
 
 /* Fonts */
 
