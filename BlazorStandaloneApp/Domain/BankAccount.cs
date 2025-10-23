@@ -20,10 +20,9 @@ public class BankAccount : IBankAccount
 
     private readonly List<Transaction> _transaction = new();
 
-    public IReadOnlyList<Transaction> Transactions => _transaction.AsReadOnly();
+    public IReadOnlyList<Transaction> Transactions => _transaction;
 
     // Chat: Added this list
-
     public List<Transaction> GetTransactions()
     {
         return _transaction;
@@ -86,8 +85,4 @@ public class BankAccount : IBankAccount
             BalanceAfterTransaction = toAccount.Balance
         });
     }
-
-    
-
-
 }

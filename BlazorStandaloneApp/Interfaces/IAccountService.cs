@@ -7,5 +7,4 @@ public interface IAccountService
     Task DeleteAccount(IBankAccount account);
     // Chat: change void to Task
     Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount);
-    
 }
