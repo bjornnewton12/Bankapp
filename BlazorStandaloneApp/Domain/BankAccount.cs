@@ -20,6 +20,8 @@ public class BankAccount : IBankAccount
 
     private readonly List<Transaction> _transaction = new();
 
+    public IReadOnlyList<Transaction> Transactions => _transaction.AsReadOnly();
+
     // Chat: Added this list
 
     public List<Transaction> GetTransactions()
