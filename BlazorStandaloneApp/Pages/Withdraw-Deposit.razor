@@ -1,5 +1,96 @@
 @page "/withdraw-deposit"
+@using BlazorStandaloneApp.Domain
+@using BlazorStandaloneApp.Interfaces
+@using BlazorStandaloneApp.Services
+@inject IAccountService AccountService
 
 <PageTitle>Withdraw & Deposit</PageTitle>
 
 <h1>Withdraw & Deposit</h1>
+
+@if (_accounts.Count == 0)
+{
+    <p>No accounts available. Please create one first.</p>
+}
+
+else
+{
+<h2>Withdraw</h2>
+
+<EditForm Model="_withdrawModel" OnValidSubmit="OnWithdrawAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-row">
+        <label>From account</label> 
+        <InputSelect @bind-Value="_withdrawModel.AccountId">
+            <option value="">Select account</option>
+            @foreach (var account in _accounts)
+            {
+                <option value="@account.Id.ToString()">@account.Name</option>
+            } 
+        </InputSelect>
+    </div>
+
+    <div class="form-row">
+        <label>Amount</label>
+        <InputNumber TValue="decimal" @bind-Value="_withdrawModel.Amount"></InputNumber>
+    </div>
+
+    <button type="submit" class="btn-submit">Create transaction</button>
+</EditForm>
+
+<h2>Deposit</h2>
+
+<EditForm Model="_depositModel" OnValidSubmit="OnDepositAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-row">
+        <label>To account</label> 
+        <InputSelect @bind-Value="_depositModel.AccountId">
+            <option value="">Select account</option>
+            @foreach (var account in _accounts)
+            {
+                <option value="@account.Id.ToString()">@account.Name</option>
+            } 
+        </InputSelect>
+    </div>
+
+    <div class="form-row">
+        <label>Amount</label>
+        <InputNumber TValue="decimal" @bind-Value="_depositModel.Amount"></InputNumber>
+    </div>
+
+    <button type="submit" class="btn-submit">Create transaction</button>
+</EditForm>
+}
+
+@code
+{
+    private readonly TransactionModel _withdrawModel = new();
+    private TransactionModel _depositModel = new();
+    private List<BankAccount> _accounts = new();
+
+    private class TransactionModel
+    {
+        public Guid AccountId { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _accounts = await AccountService.GetAccounts();
+    }
+
+    private async Task OnWithdrawAsync()
+    {
+        await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount);
+        _accounts = await AccountService.GetAccounts();
+    }
+    private async Task OnDepositAsync()
+    {
+        await AccountService.Deposit(_depositModel.AccountId, _depositModel.Amount);
+        _accounts = await AccountService.GetAccounts();
+    }
+}

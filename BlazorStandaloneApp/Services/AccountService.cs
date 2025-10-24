@@ -59,23 +59,48 @@ namespace BlazorStandaloneApp.Services
             }
         }
 
-        // Chat: Changed from public void to public async Task
         public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
         {
+            // Från Christopher
+            var fromStorage = await _storageService.GetItemAsync<List<BankAccount>>(StorageKey);
+
             var fromAccount = _accounts.FirstOrDefault(x => x.Id == fromAccountId);
             var toAccount = _accounts.FirstOrDefault(y => y.Id == toAccountId);
 
+
             fromAccount.TransferTo(toAccount, amount);
 
-            // Chat: Added this:
             var allTransactions = _accounts
             .SelectMany(a => a.GetTransactions())
             .ToList();
 
-            // Save them in LocalStorage for the History page
+            // Från Christopher
+            await _storageService.SetItemAsync(StorageKey, _accounts);
+        }
+
+        public async Task Withdraw(Guid accountId, decimal amount)
+        {
+            await IsInitialized();
+            var account = _accounts.FirstOrDefault(z => z.Id == accountId);
+
+            account.Withdraw(amount);
+
+            var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
             await _storageService.SetItemAsync("transactions", allTransactions);
 
-            // Also save accounts to keep balances updated
+            await SaveAsync();
+        }
+        
+        public async Task Deposit(Guid accountId, decimal amount)
+        {
+            await IsInitialized();
+            var account = _accounts.FirstOrDefault(z => z.Id == accountId);
+
+            account.Deposit(amount);
+
+            var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
+            await _storageService.SetItemAsync("transactions", allTransactions);
+
             await SaveAsync();
         }
     }

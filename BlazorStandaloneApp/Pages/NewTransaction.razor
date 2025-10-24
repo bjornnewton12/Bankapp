@@ -63,15 +63,6 @@
         public decimal Amount { get; set; }
     }
 
-    //Chat: replace protected override async void OnInitialized() with the one just below
-    @*
-    protected override async void OnInitialized()
-    {
-        _accounts = await  AccountService.GetAccounts();
-        _toAccounts = _accounts;
-    }
-    *@
-
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
@@ -93,7 +84,6 @@
 
         try
         {
-            // Chat: Added await method
             await AccountService.Transfer(_model.FromAccountId, _model.ToAccountId, _model.Amount);
 
             // Uppdatera vår lista

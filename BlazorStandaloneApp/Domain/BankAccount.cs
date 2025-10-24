@@ -35,6 +35,7 @@ public class BankAccount : IBankAccount
         CurrencyType = currencyType;
         Balance = balance;
         LastUpdated = DateTime.Now;
+
     }
 
     [JsonConstructor]
@@ -50,12 +51,32 @@ public class BankAccount : IBankAccount
 
     public void Deposit(decimal amount)
     {
-        throw new NotImplementedException();
+        Balance += amount;
+        LastUpdated = DateTime.UtcNow;
+        _transaction.Add(new Transaction
+        {
+            Type = TransactionType.Deposit,
+            Amount = amount,
+            FromAccount = Id,
+            ToAccount = Id,
+            DateTime = DateTime.UtcNow,
+            BalanceAfterTransaction = Balance
+        });
     }
 
     public void Withdraw(decimal amount)
     {
-        throw new NotImplementedException();
+        Balance -= amount;
+        LastUpdated = DateTime.UtcNow;
+        _transaction.Add(new Transaction
+        {
+            Type = TransactionType.Withdraw,
+            Amount = amount,
+            FromAccount = Id,
+            ToAccount = Id,
+            DateTime = DateTime.UtcNow,
+            BalanceAfterTransaction = Balance
+        });
     }
 
     public void TransferTo(BankAccount toAccount, decimal amount)
