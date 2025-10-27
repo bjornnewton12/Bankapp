@@ -44,7 +44,7 @@
 
 <!-- Add accounts -->
 
-<h2>Added accounts</h2>
+<h2>Account balances</h2>
 @if(_accounts.Count == 0)
 {
     <p>There are no accounts, create your first.</p>
@@ -65,6 +65,7 @@ else
 @code {
     private CreateAccountModel _model = new();
     private List<BankAccount> _accounts = new();
+
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();

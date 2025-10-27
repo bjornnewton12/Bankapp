@@ -7,6 +7,7 @@
 <PageTitle>Account transaction</PageTitle>
 
 <h1>Account transaction</h1>
+
 <EditForm Model="_model" OnValidSubmit="OnSubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -40,7 +41,7 @@
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 
-<h2>Account balance</h2>
+<h2>Account balances</h2>
     <ul>
         @foreach (var account in _accounts)
         {

@@ -20,7 +20,7 @@ else
                 <th>Balance</th>
                 <th>Currency</th>
                 <th>Last updated</th>
-                <th></th>
+                <th><!-- Potential remove button --></th>
             </tr>
         </thead>
         <tbody>
@@ -48,9 +48,7 @@ else
 @code {
     private CreateAccountModel _model = new();
     private List<BankAccount> _accounts = new();
-
-
-
+    
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();

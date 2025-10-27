@@ -18,7 +18,6 @@ public class StorageService : IStorageService
         _jsRuntime = jsRuntime;
     }
 
-
     // Save
     public async Task SetItemAsync<T>(string key, T value)
     {

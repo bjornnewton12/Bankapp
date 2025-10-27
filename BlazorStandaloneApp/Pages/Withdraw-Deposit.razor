@@ -16,6 +16,8 @@
 else
 {
 <div class="form-container">
+
+<!-- Withdraw -->
 <div class="form-column">
 <h2>Withdraw</h2>
 
@@ -43,6 +45,7 @@ else
 </EditForm>
 </div>
 
+<!-- Deposit -->
 <div class="form-column">
 <h2>Deposit</h2>
 
@@ -94,6 +97,7 @@ else
         await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount);
         _accounts = await AccountService.GetAccounts();
     }
+
     private async Task OnDepositAsync()
     {
         await AccountService.Deposit(_depositModel.AccountId, _depositModel.Amount);

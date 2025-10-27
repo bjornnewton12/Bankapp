@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using BlazorStandaloneApp.Interfaces;
 
 namespace BlazorStandaloneApp.Domain;
 
@@ -15,18 +12,9 @@ public class BankAccount : IBankAccount
     public Guid Id { get; private set; } = Guid.NewGuid();
     public AccountType AccountType { get; private set; }
     public CurrencyType CurrencyType { get; private set; }
-
     public string Name { get; private set; }
-
-
     public decimal Balance { get; private set; }
-
     public DateTime LastUpdated { get; private set; }
-
-    // private readonly List<Transaction> _transaction = new();
-
-    // public IReadOnlyList<Transaction> Transactions => _transaction;
-
     public List<Transaction> Transactions { get; private set; } = new();
 
     public List<Transaction> GetTransactions()
@@ -42,7 +30,6 @@ public class BankAccount : IBankAccount
         CurrencyType = currencyType;
         Balance = balance;
         LastUpdated = DateTime.Now;
-
     }
 
     [JsonConstructor]
@@ -57,8 +44,17 @@ public class BankAccount : IBankAccount
         Transactions = transactions ?? new List<Transaction>();
     }
 
+    /// <summary>
+    /// Deposit specific amount to account balance
+    /// </summary>
+    /// <param name="amount"></param>
     public void Deposit(decimal amount)
     {
+        if (amount <= 0)
+        {
+            throw new Exception("Deposit must be higher than 0");
+        }
+
         Balance += amount;
         LastUpdated = DateTime.UtcNow;
         Transactions.Add(new Transaction
@@ -78,6 +74,11 @@ public class BankAccount : IBankAccount
     /// <param name="amount"></param>
     public void Withdraw(decimal amount)
     {
+        if (amount <= 0)
+        {
+            throw new Exception("Withdraw must be higher than 0");
+        }
+
         Balance -= amount;
         LastUpdated = DateTime.UtcNow;
         Transactions.Add(new Transaction
@@ -90,14 +91,15 @@ public class BankAccount : IBankAccount
             BalanceAfterTransaction = Balance
         });
     }
+
     /// <summary>
-    /// Transfers from specific account to whhích account
+    /// Transfers from specific account to which account
     /// </summary>
-    /// <param name="toAccount">blablabla</param>
+    /// <param name="toAccount"></param>
     /// <param name="amount"></param>
     public void TransferTo(BankAccount toAccount, decimal amount)
     {
-        // Från vilket konto
+        // From which account
         Balance -= amount;
         LastUpdated = DateTime.Now;
         Transactions.Add(new Transaction
@@ -110,7 +112,7 @@ public class BankAccount : IBankAccount
             BalanceAfterTransaction = Balance
         });
         
-        // till vilket konto
+        // To which account
         toAccount.Balance += amount;
         toAccount.LastUpdated = DateTime.UtcNow;
         toAccount.Transactions.Add(new Transaction

@@ -1,5 +1,8 @@
 namespace BlazorStandaloneApp.Interfaces;
 
+/// <summary>
+/// Interface containing StorageService methods
+/// </summary>
 public interface IStorageService
 {
     // Save

@@ -22,7 +22,6 @@ else
         </InputSelect>
     </div>
 
-    
     @if(!_selectedAccount.Transactions.Any()) // Vad ska jag göra här?
     {
         <p>No transactions</p>
@@ -53,9 +52,9 @@ else
             {
                 <tr>
                 <td>@transaction.DateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@transaction.Amount</td>
+                <td>@transaction.Amount @transaction.CurrencyType</td>
                 <td>@transaction.Type</td>
-                <td>@transaction.BalanceAfterTransaction</td>
+                <td>@transaction.BalanceAfterTransaction @transaction.CurrencyType</td>
                 <td>@transaction.CurrencyType</td>
                 <td>
                     @if(transaction.FromAccount.HasValue || transaction.ToAccount.HasValue)
@@ -71,15 +70,15 @@ else
 }
 
 @code {
-    private List<BankAccount> _accounts; // Vad ska jag göra här?
+    private List<BankAccount>? _accounts; // Vad ska jag göra här?
     private List<Transaction> _transactions = new();
     private IBankAccount? _selectedAccount;
     private Guid _selectedAccountID;
-    // Startvärde
+    // Start value
     private SortKey currentKey = SortKey.Date;
     private bool descending = true;
 
-    //Sorteringsvarianter
+    //Sorting variants
     private enum SortKey
     {
         Date,
@@ -100,6 +99,7 @@ else
             descending = true;
         }
     }
+
     private Guid SelectedAccountId
     {
         get => _selectedAccountID;
@@ -109,9 +109,9 @@ else
                 return;
             _selectedAccountID = value;
             _selectedAccount = _accounts.FirstOrDefault(account => account.Id == value);
-
         }
     }
+
     protected override async Task OnInitializedAsync()
     {
         var accounts = await AccountService.GetAccounts();

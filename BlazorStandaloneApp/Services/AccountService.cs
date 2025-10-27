@@ -6,7 +6,6 @@ namespace BlazorStandaloneApp.Services
         private readonly List<BankAccount> _accounts = new();
         private readonly IStorageService _storageService;
         private bool isLoaded;
-
         public AccountService(IStorageService storageService) => _storageService = storageService;
 
         private async Task IsInitialized()
@@ -53,12 +52,9 @@ namespace BlazorStandaloneApp.Services
 
         public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
         {
-            // Från Christopher
             var fromStorage = await _storageService.GetItemAsync<List<BankAccount>>(StorageKey);
-
             var fromAccount = _accounts.FirstOrDefault(x => x.Id == fromAccountId);
             var toAccount = _accounts.FirstOrDefault(y => y.Id == toAccountId);
-
 
             fromAccount.TransferTo(toAccount, amount); // Vad ska jag göra här?
 
@@ -66,7 +62,6 @@ namespace BlazorStandaloneApp.Services
             .SelectMany(a => a.GetTransactions())
             .ToList();
 
-            // Från Christopher
             await _storageService.SetItemAsync(StorageKey, _accounts);
         }
 

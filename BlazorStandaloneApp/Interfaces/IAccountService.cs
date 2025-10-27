@@ -1,5 +1,8 @@
 namespace BlazorStandaloneApp.Interfaces;
 
+/// <summary>
+/// Interface containing AccountService methods
+/// </summary>
 public interface IAccountService
 {
     Task<BankAccount> CreateAccount(string name, AccountType accountType, CurrencyType currencyType, decimal initialBalance);
