@@ -26,7 +26,12 @@
 
     <div class="form-row">
         <label>Currency</label>
-        <InputText @bind-Value="_model.Currency"></InputText>
+        <InputSelect @bind-Value="_model.CurrencyType">
+            <option value="">Select currency</option>
+            <option value="@CurrencyType.SEK">SEK</option>
+            <option value="@CurrencyType.Euro">£</option>
+            <option value="@CurrencyType.Dollar">$</option>
+        </InputSelect>
     </div>
 
     <div class="form-row">
@@ -37,9 +42,9 @@
     <button type="submit" class="btn-submit">Create account</button>
 </EditForm>
 
-<!--- Lägg till alla konton --->
+<!-- Add accounts -->
 
-<h4>Added accounts</h4>
+<h2>Account balances</h2>
 @if(_accounts.Count == 0)
 {
     <p>There are no accounts, create your first.</p>
@@ -50,7 +55,7 @@ else
         @foreach (var account in _accounts)
         {
             <li>
-            <strong>@account.Name</strong> - @account.AccountType - @account.Balance @account.Currency
+            <strong>@account.Name</strong> - @account.AccountType - @account.Balance @account.CurrencyType
             <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
             </li>
         }
@@ -59,7 +64,8 @@ else
 
 @code {
     private CreateAccountModel _model = new();
-    private List<IBankAccount> _accounts = new();
+    private List<BankAccount> _accounts = new();
+
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
@@ -69,9 +75,9 @@ else
     {
         try{
             await AccountService.CreateAccount(
-            _model.Name,
+            _model.Name, // Vad ska jag göra här?
             _model.AccountType,
-            _model.Currency,
+            _model.CurrencyType,
             _model.InitialBalance);
             _accounts = await AccountService.GetAccounts();
             _model.Clear();
@@ -88,13 +94,13 @@ else
         [Required(ErrorMessage = "Please add an account name")]
         public string? Name { get; set; }
         public AccountType AccountType { get; set; }
-        public string? Currency { get; set; } = "SEK";
+        public CurrencyType CurrencyType { get; set; }
         public decimal InitialBalance { get; set; } = 0;
 
         public void Clear()
         {
             Name = string.Empty;
-            Currency = "SEK";
+            CurrencyType = default;
             InitialBalance = 0;
             AccountType = default;
         }

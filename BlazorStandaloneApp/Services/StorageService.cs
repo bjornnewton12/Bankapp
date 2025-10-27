@@ -18,15 +18,14 @@ public class StorageService : IStorageService
         _jsRuntime = jsRuntime;
     }
 
-
-    // Spara
+    // Save
     public async Task SetItemAsync<T>(string key, T value)
     {
         var json = JsonSerializer.Serialize(value, _jsonSerializerOptions);
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, json);
     }
 
-    // Hämta
+    // Collect
     public async Task<T> GetItemAsync<T>(string key)
     {
         var json = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);

@@ -1,0 +1,150 @@
+@page "/withdraw-deposit"
+@using BlazorStandaloneApp.Domain
+@using BlazorStandaloneApp.Interfaces
+@using BlazorStandaloneApp.Services
+@inject IAccountService AccountService
+
+<PageTitle>Withdraw & Deposit</PageTitle>
+
+<h1>Withdraw & Deposit</h1>
+
+@if (_accounts.Count == 0)
+{
+    <p>No accounts available. Please create one first.</p>
+}
+
+else
+{
+<div class="form-container">
+
+<!-- Withdraw -->
+<div class="form-column">
+<h2>Withdraw</h2>
+
+<EditForm Model="_withdrawModel" OnValidSubmit="OnWithdrawAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-row">
+        <label>From account</label> 
+        <InputSelect @bind-Value="_withdrawModel.AccountId">
+            <option value="">Select account</option>
+            @foreach (var account in _accounts)
+            {
+                <option value="@account.Id.ToString()">@account.Name</option>
+            } 
+        </InputSelect>
+    </div>
+
+    <div class="form-row">
+        <label>Amount</label>
+        <InputNumber TValue="decimal" @bind-Value="_withdrawModel.Amount"></InputNumber>
+    </div>
+
+    @if (!string.IsNullOrEmpty(_withdrawErrorMessage))
+    {
+        <div class="alert alert-danger">
+        @_withdrawErrorMessage
+        </div>
+    }
+
+    <button type="submit" class="btn-submit">Create transaction</button>
+</EditForm>
+</div>
+
+<!-- Deposit -->
+<div class="form-column">
+<h2>Deposit</h2>
+
+<EditForm Model="_depositModel" OnValidSubmit="OnDepositAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-row">
+        <label>To account</label> 
+        <InputSelect @bind-Value="_depositModel.AccountId">
+            <option value="">Select account</option>
+            @foreach (var account in _accounts)
+            {
+                <option value="@account.Id.ToString()">@account.Name</option>
+            } 
+        </InputSelect>
+    </div>
+
+    <div class="form-row">
+        <label>Amount</label>
+        <InputNumber TValue="decimal" @bind-Value="_depositModel.Amount"></InputNumber>
+    </div>
+
+    @if (!string.IsNullOrEmpty(_depositErrorMessage))
+    {
+        <div class="alert alert-danger">
+        @_depositErrorMessage
+        </div>
+    }
+
+    <button type="submit" class="btn-submit">Create transaction</button>
+</EditForm>
+</div>
+</div>
+
+<h2>Account balances</h2>
+    <ul>
+        @foreach (var account in _accounts)
+        {
+            <li>
+            <strong>@account.Name</strong>: <strong>@account.Balance @account.CurrencyType</strong>
+            <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
+            </li>
+        }
+    </ul>
+
+}
+
+@code
+{
+    private readonly TransactionModel _withdrawModel = new();
+    private TransactionModel _depositModel = new();
+    private List<BankAccount> _accounts = new();
+    private string? _withdrawErrorMessage;
+    private string? _depositErrorMessage;
+
+    private class TransactionModel
+    {
+        public Guid AccountId { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _accounts = await AccountService.GetAccounts();
+    }
+
+    private async Task OnWithdrawAsync()
+    {
+        try
+        {
+        await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount);
+        _accounts = await AccountService.GetAccounts();
+        _withdrawErrorMessage = null;
+        }
+        catch(Exception ex)
+        {
+            _withdrawErrorMessage = ex.Message;
+        }
+    }
+
+    private async Task OnDepositAsync()
+    {
+        try 
+        {
+        await AccountService.Deposit(_depositModel.AccountId, _depositModel.Amount);
+        _accounts = await AccountService.GetAccounts();
+        _withdrawErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            _depositErrorMessage = ex.Message;
+        }
+    }
+}

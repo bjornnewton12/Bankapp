@@ -2,6 +2,8 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0
 }
 
 h1:focus {
@@ -116,7 +118,7 @@ code {
     border: none;
     height: 2.2rem;
     padding: 0.3rem 0.3rem 0.3rem 0.5rem;
-    width: 250px; 
+    width: 300px; 
 }
 
 .form-row select {
@@ -124,7 +126,7 @@ code {
     border: none;
     height: 2.2rem;
     padding: 0.3rem 0.3rem 0.3rem 0.5rem; 
-    width: 250px; 
+    width: 300px; 
 }
 
 .form-row label {
@@ -132,6 +134,27 @@ code {
     margin-bottom: 0.5rem; 
     font-weight: 500;      
     color: black;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+@media (min-width: 950px) {
+    .form-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;   
+        align-items: flex-start;
+        gap: 0.5rem;                 
+    }
+
+    .form-column {
+        width: 350px;
+        flex: 0 0 auto;
+    }
 }
 
 /* Knappar */
@@ -145,7 +168,10 @@ code {
     cursor: pointer;
     margin-top: 0.5rem;
     margin-bottom: 2rem;
-    
+}
+
+.btn-submit:hover {
+    background-color: black;
 }
 
 .remove-btn {
@@ -162,8 +188,17 @@ code {
     background-color: #b02a37;
 }
 
-/* Table */
+/* Sort */
+.btn-sort {
+    background-color: #abdfd0;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding-left: calc(var(--original-padding-left, 0px) - 6px);
+}
 
+
+/* Table */
 .accounts-table {
     width: 100%;
     border-collapse: collapse;
@@ -180,6 +215,10 @@ code {
 
 .accounts-table th {
     font-weight: 600;
+}
+
+.accounts-table tr {
+    padding: 4px 0;
 }
 
 .accounts-table tbody tr {
@@ -203,7 +242,6 @@ code {
 }
 
 /* Fonts */
-
 h1 {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 800;
@@ -211,3 +249,19 @@ h1 {
     letter-spacing: -0.01em;
     margin-bottom: 2rem;
 }
+
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    font-size: 200%;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+}
+
+/* Images */
+.header img {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+

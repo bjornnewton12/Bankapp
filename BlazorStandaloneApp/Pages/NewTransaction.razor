@@ -1,5 +1,129 @@
 @page "/newTransaction"
+@using BlazorStandaloneApp.Domain
+@using BlazorStandaloneApp.Interfaces
+@using BlazorStandaloneApp.Services
+@inject IAccountService AccountService
 
-<PageTitle>New Transaction</PageTitle>
+<PageTitle>Account transaction</PageTitle>
 
-<h1>New Transaction</h1>
+<h1>Account transaction</h1>
+
+<EditForm Model="_model" OnValidSubmit="OnSubmitAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-row">
+        <label>From account</label> 
+        <InputSelect @bind-Value="_model.FromAccountId">
+            <option value="">Select account</option>
+            @foreach (var account in _accounts)
+            {
+                <option value="@account.Id.ToString()">@account.Name</option>
+            } 
+        </InputSelect>
+    </div>
+
+    <div class="form-row">
+    <label>To account</label>
+    <InputSelect @bind-Value="_model.ToAccountId">
+        <option value="">Select account</option>
+        @foreach (var account in _accounts)
+        {
+            <option value="@account.Id.ToString()">@account.Name</option>
+        }
+    </InputSelect>
+    </div>
+
+    <div class="form-row">
+        <label>Amount</label>
+        <InputNumber TValue="decimal" @bind-Value="_model.Amount"></InputNumber>
+    </div>
+
+    <button type="submit" class="btn-submit">Create transaction</button>
+</EditForm>
+
+<h2>Account balances</h2>
+    <ul>
+        @foreach (var account in _accounts)
+        {
+            <li>
+            <strong>@account.Name</strong>: <strong>@account.Balance @account.CurrencyType</strong>
+            <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
+            </li>
+        }
+    </ul>
+
+@code {
+    private readonly TransferFormModel _model = new();
+    private List<BankAccount> _accounts = new();
+    private List<BankAccount> _toAccounts= new();
+
+    private class TransferFormModel
+    {
+        public Guid FromAccountId { get; set; }
+        public Guid ToAccountId { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _accounts = await AccountService.GetAccounts();
+        _toAccounts = _accounts;
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        if (_model.FromAccountId == Guid.Empty || _model.ToAccountId == Guid.Empty)
+        {
+            StateHasChanged();
+            return;
+        }
+        if (_model.FromAccountId == _model.ToAccountId)
+        {
+            StateHasChanged();
+            return;
+        }
+
+        try
+        {
+            await AccountService.Transfer(_model.FromAccountId, _model.ToAccountId, _model.Amount);
+
+            // Uppdatera vår lista
+            _accounts = await AccountService.GetAccounts();
+
+            // Visa bekräftelse
+            var from = _accounts.First(x => x.Id == _model.FromAccountId);
+            var to = _accounts.First(x => x.Id == _model.ToAccountId);
+
+            _model.Amount = 0;
+            StateHasChanged();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception.Message);
+        }
+        return;
+    }    
+
+        private void HandleFormChanged(ChangeEventArgs eventArgs)
+        {
+            if (Guid.TryParse(eventArgs.Value?.ToString(), out var id))
+            {
+                OnFormChanged(id);
+            }
+        }
+
+        private void OnFormChanged(Guid fromId)
+        {
+            _model.FromAccountId = fromId;
+            var from = _accounts.FirstOrDefault(x => x.Id == fromId);
+            if (from != null)
+            {
+                _toAccounts = _accounts.Where(account => account.Id != fromId).ToList();
+            }
+            else
+            {
+                _accounts = _accounts.ToList();
+            }
+            _model.ToAccountId = Guid.Empty;
+        }   
+}

@@ -1,5 +1,4 @@
 namespace BlazorStandaloneApp.Interfaces
-
 {
     /// <summary>
     /// Interface containing Bankaccount methods
@@ -8,12 +7,13 @@ namespace BlazorStandaloneApp.Interfaces
     {
         Guid Id { get; }
         AccountType AccountType { get; }
+        CurrencyType CurrencyType { get; }
         string Name { get; }
-        string Currency { get; }
         decimal Balance { get; }
         DateTime LastUpdated { get; }
-
+        List <Transaction> Transactions { get; }
         void Withdraw(decimal amount);
         void Deposit(decimal amount);
+        void TransferTo(BankAccount toAccount , decimal amount);
     }
 }
