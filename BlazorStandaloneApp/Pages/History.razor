@@ -43,7 +43,6 @@ else
                     <th><button class="btn-sort" @onclick="() => SetSort(SortKey.BalanceAfterTransaction)">
                         Balance @(currentKey == SortKey.BalanceAfterTransaction ? (descending ? "⯆" : "⯅") : "")
                     </button></th>
-                    <th>Currency</th>
                     <th>From ⭢ To</th>
                 </tr>
             </thead>
@@ -55,7 +54,6 @@ else
                 <td>@transaction.Amount @transaction.CurrencyType</td>
                 <td>@transaction.Type</td>
                 <td>@transaction.BalanceAfterTransaction @transaction.CurrencyType</td>
-                <td>@transaction.CurrencyType</td>
                 <td>
                     @if(transaction.FromAccount.HasValue || transaction.ToAccount.HasValue)
                     {

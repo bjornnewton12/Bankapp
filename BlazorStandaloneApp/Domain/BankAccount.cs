@@ -52,7 +52,7 @@ public class BankAccount : IBankAccount
     {
         if (amount <= 0)
         {
-            throw new Exception("Deposit must be higher than 0");
+            throw new ArgumentException("Deposit must be higher than 0");
         }
 
         Balance += amount;
@@ -76,7 +76,7 @@ public class BankAccount : IBankAccount
     {
         if (amount <= 0)
         {
-            throw new Exception("Withdraw must be higher than 0");
+            throw new ArgumentException("Withdraw must be higher than 0");
         }
 
         Balance -= amount;

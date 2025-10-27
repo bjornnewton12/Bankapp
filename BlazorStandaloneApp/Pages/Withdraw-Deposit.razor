@@ -41,6 +41,13 @@ else
         <InputNumber TValue="decimal" @bind-Value="_withdrawModel.Amount"></InputNumber>
     </div>
 
+    @if (!string.IsNullOrEmpty(_withdrawErrorMessage))
+    {
+        <div class="alert alert-danger">
+        @_withdrawErrorMessage
+        </div>
+    }
+
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 </div>
@@ -69,10 +76,29 @@ else
         <InputNumber TValue="decimal" @bind-Value="_depositModel.Amount"></InputNumber>
     </div>
 
+    @if (!string.IsNullOrEmpty(_depositErrorMessage))
+    {
+        <div class="alert alert-danger">
+        @_depositErrorMessage
+        </div>
+    }
+
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 </div>
 </div>
+
+<h2>Account balances</h2>
+    <ul>
+        @foreach (var account in _accounts)
+        {
+            <li>
+            <strong>@account.Name</strong>: <strong>@account.Balance @account.CurrencyType</strong>
+            <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
+            </li>
+        }
+    </ul>
+
 }
 
 @code
@@ -80,6 +106,8 @@ else
     private readonly TransactionModel _withdrawModel = new();
     private TransactionModel _depositModel = new();
     private List<BankAccount> _accounts = new();
+    private string? _withdrawErrorMessage;
+    private string? _depositErrorMessage;
 
     private class TransactionModel
     {
@@ -94,13 +122,29 @@ else
 
     private async Task OnWithdrawAsync()
     {
+        try
+        {
         await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount);
         _accounts = await AccountService.GetAccounts();
+        _withdrawErrorMessage = null;
+        }
+        catch(Exception ex)
+        {
+            _withdrawErrorMessage = ex.Message;
+        }
     }
 
     private async Task OnDepositAsync()
     {
+        try 
+        {
         await AccountService.Deposit(_depositModel.AccountId, _depositModel.Amount);
         _accounts = await AccountService.GetAccounts();
+        _withdrawErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            _depositErrorMessage = ex.Message;
+        }
     }
 }
