@@ -16,7 +16,8 @@ namespace BlazorStandaloneApp.Interfaces
         DateTime LastUpdated { get; }
 
         // Lade till med Arbet 2025-10-23
-        IReadOnlyList<Transaction> Transactions { get; }
+        // IReadOnlyList<Transaction> Transactions { get; }
+        List <Transaction> Transactions { get; }
 
         void Withdraw(decimal amount);
         void Deposit(decimal amount);

@@ -17,13 +17,13 @@ else
         @bind-Value="SelectedAccountId">
         @foreach (var account in _accounts)
         {
-            <option value="@account.Id">@account.Name, Balance: @account.Balance</option>
+            <option value="@account.Id">@account.Name, Balance: @account.Balance @account.CurrencyType</option>
         }
         </InputSelect>
     </div>
 
     
-    @if(!_selectedAccount.Transactions.Any())
+    @if(!_selectedAccount.Transactions.Any()) // Vad ska jag göra här?
     {
         <p>No transactions</p>
     }
@@ -44,6 +44,7 @@ else
                     <th><button class="btn-sort" @onclick="() => SetSort(SortKey.BalanceAfterTransaction)">
                         Balance @(currentKey == SortKey.BalanceAfterTransaction ? (descending ? "⯆" : "⯅") : "")
                     </button></th>
+                    <th>Currency</th>
                     <th>From ⭢ To</th>
                 </tr>
             </thead>
@@ -55,10 +56,11 @@ else
                 <td>@transaction.Amount</td>
                 <td>@transaction.Type</td>
                 <td>@transaction.BalanceAfterTransaction</td>
+                <td>@transaction.CurrencyType</td>
                 <td>
                     @if(transaction.FromAccount.HasValue || transaction.ToAccount.HasValue)
                     {
-                        <span>@(transaction.FromAccount.ToString()[..6]) ⭢ @(transaction.ToAccount.ToString()[..6])</span>
+                        <span>@(transaction.FromAccount.ToString()[..6]) ⭢ @(transaction.ToAccount.ToString()[..6])</span> // Vad ska jag göra här?
                     }
                 </td>
                 </tr>
@@ -69,7 +71,8 @@ else
 }
 
 @code {
-    private List<BankAccount> _accounts;
+    private List<BankAccount> _accounts; // Vad ska jag göra här?
+    private List<Transaction> _transactions = new();
     private IBankAccount? _selectedAccount;
     private Guid _selectedAccountID;
     // Startvärde
@@ -111,7 +114,9 @@ else
     }
     protected override async Task OnInitializedAsync()
     {
-        _accounts = await AccountService.GetAccounts();
+        var accounts = await AccountService.GetAccounts();
+        _accounts = accounts.Cast<BankAccount>().ToList();
+        _transactions = new();
 
         // Om det finns konton i vår lista, välj första för att visa UI
         if (_accounts.Count > 0)
@@ -128,7 +133,7 @@ else
 
         // sortera lista, Datum och belopp
         var sortedList = _selectedAccount.Transactions.AsEnumerable();
-        sortedList = currentKey switch
+        sortedList = currentKey switch // Vad ska jag göra här?
         {
             SortKey.Amount => (descending ? sortedList.OrderByDescending(t => t.Amount) 
             : sortedList.OrderBy(t => t.Amount)),
@@ -139,7 +144,6 @@ else
             SortKey.BalanceAfterTransaction => (descending ? sortedList.OrderByDescending(t => t.BalanceAfterTransaction) 
             : sortedList.OrderBy(t => t.BalanceAfterTransaction))
         };
-
         return sortedList;
     }
 }

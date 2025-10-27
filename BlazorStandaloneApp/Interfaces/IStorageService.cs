@@ -2,9 +2,9 @@ namespace BlazorStandaloneApp.Interfaces;
 
 public interface IStorageService
 {
-    // Spara
+    // Save
     Task SetItemAsync<T>(string key, T value);
 
-    // Hämta
+    // Collect
     Task<T> GetItemAsync<T>(string key);
 }

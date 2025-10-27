@@ -109,7 +109,6 @@ code {
 /* Jag har lagt till */
 
 /* Forms */
-
 .form-row {
     margin-bottom: 0.5rem;
 }
@@ -137,8 +136,28 @@ code {
     color: black;
 }
 
-/* Knappar */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 
+@media (min-width: 950px) {
+    .form-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;   
+        align-items: flex-start;
+        gap: 0.5rem;                 
+    }
+
+    .form-column {
+        width: 350px;
+        flex: 0 0 auto;
+    }
+}
+
+/* Knappar */
 .btn-submit {
     background-color: #306D66;
     color: white;
@@ -180,7 +199,6 @@ code {
 
 
 /* Table */
-
 .accounts-table {
     width: 100%;
     border-collapse: collapse;
@@ -223,10 +241,7 @@ code {
     flex-wrap: wrap;
 }
 
-
-
 /* Fonts */
-
 h1 {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 800;
@@ -244,7 +259,6 @@ h2 {
 }
 
 /* Images */
-
 .header img {
     width: 100%;
     margin: 0;

@@ -15,6 +15,8 @@
 
 else
 {
+<div class="form-container">
+<div class="form-column">
 <h2>Withdraw</h2>
 
 <EditForm Model="_withdrawModel" OnValidSubmit="OnWithdrawAsync">
@@ -39,7 +41,9 @@ else
 
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
+</div>
 
+<div class="form-column">
 <h2>Deposit</h2>
 
 <EditForm Model="_depositModel" OnValidSubmit="OnDepositAsync">
@@ -64,6 +68,8 @@ else
 
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
+</div>
+</div>
 }
 
 @code

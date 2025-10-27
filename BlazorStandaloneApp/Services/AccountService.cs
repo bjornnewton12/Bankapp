@@ -1,14 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using BlazorStandaloneApp.Domain;
-using BlazorStandaloneApp.Interfaces;
-
 namespace BlazorStandaloneApp.Services
 {
-
-    public class AccountService : IAccountService
+        public class AccountService : IAccountService
     {
         private const string StorageKey = "BlazorStandaloneApp.accounts";
         private readonly List<BankAccount> _accounts = new();
@@ -68,7 +60,7 @@ namespace BlazorStandaloneApp.Services
             var toAccount = _accounts.FirstOrDefault(y => y.Id == toAccountId);
 
 
-            fromAccount.TransferTo(toAccount, amount);
+            fromAccount.TransferTo(toAccount, amount); // Vad ska jag göra här?
 
             var allTransactions = _accounts
             .SelectMany(a => a.GetTransactions())
@@ -83,7 +75,7 @@ namespace BlazorStandaloneApp.Services
             await IsInitialized();
             var account = _accounts.FirstOrDefault(z => z.Id == accountId);
 
-            account.Withdraw(amount);
+            account.Withdraw(amount); // Vad ska jag göra här?
 
             var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
             await _storageService.SetItemAsync("transactions", allTransactions);
@@ -96,7 +88,7 @@ namespace BlazorStandaloneApp.Services
             await IsInitialized();
             var account = _accounts.FirstOrDefault(z => z.Id == accountId);
 
-            account.Deposit(amount);
+            account.Deposit(amount); // Vad ska jag göra här?
 
             var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
             await _storageService.SetItemAsync("transactions", allTransactions);

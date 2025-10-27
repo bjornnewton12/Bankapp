@@ -4,9 +4,9 @@
 @using BlazorStandaloneApp.Services
 @inject IAccountService AccountService
 
-<PageTitle>New transaction</PageTitle>
+<PageTitle>Account transaction</PageTitle>
 
-<h1>New transaction</h1>
+<h1>Account transaction</h1>
 <EditForm Model="_model" OnValidSubmit="OnSubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -45,7 +45,7 @@
         @foreach (var account in _accounts)
         {
             <li>
-            <strong>@account.Name</strong>: <strong>@account.Balance</strong>
+            <strong>@account.Name</strong>: <strong>@account.Balance @account.CurrencyType</strong>
             <small>(uppdaterad @account.LastUpdated.ToLocalTime())</small>
             </li>
         }
