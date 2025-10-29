@@ -185,7 +185,7 @@ code {
 }
 
 .remove-btn:hover {
-    background-color: #b02a37;
+    background-color: black;
 }
 
 /* Sort */
@@ -265,3 +265,25 @@ h2 {
     padding: 0;
 }
 
+/* Warning messages */
+
+.alert-danger {
+    background-color: #dc3545;
+    color: white;
+    width: 300px; 
+    border: none;
+}
+
+/* Sub-menu*/
+.nav-link-sub {
+    white-space: nowrap;      
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+    line-height: 1.2;         
+    padding-top: 4px;         
+    padding-bottom: 4px;
+    display: flex;            
+    align-items: center;      
+    color: white;             
+    text-decoration: none;   
+}

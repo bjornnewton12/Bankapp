@@ -20,20 +20,29 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="myAccounts">
-                <span class="bi bi-wallet" aria-hidden="true"></span> My accounts
-            </NavLink>
+            <button class="nav-link btn btn-toggle align-items-center"
+                @onclick="ToggleAccountsMenu"
+                style="background:none; border:none; color:white; text-align:left; width:100%;">
+                <span class="bi bi-wallet" aria-hidden="true"></span> Accounts
+                <span class="bi @(showAccountsMenu ? "bi-chevron-up" : "bi-chevron-down") float-end"></span>
+            </button>
+
+            @if (showAccountsMenu)
+            {
+                <nav class="nav flex-column ms-4 sub-menu">
+                    <NavLink class="nav-link nav-link-sub" href="myAccounts">
+                        <span class="bi bi-person-lines-fill" aria-hidden="true"></span> My Accounts
+                    </NavLink>
+                    <NavLink class="nav-link nav-link-sub" href="accounts">
+                        <span class="bi bi-plus-circle" aria-hidden="true"></span> New Account
+                    </NavLink>
+                    <NavLink class="nav-link nav-link-sub" href="newTransaction">
+                        <span class="bi bi-database" aria-hidden="true"></span> Account transaction
+                    </NavLink>
+                </nav>
+            }
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="accounts">
-                <span class="bi bi-plus-circle" aria-hidden="true"></span> New account
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="newTransaction">
-                <span class="bi bi-database" aria-hidden="true"></span> Account transaction
-            </NavLink>
-        </div>
+
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="history">
                 <span class="bi bi-clock-history" aria-hidden="true"></span> History
@@ -52,11 +61,17 @@
 
 @code {
     private bool collapseNavMenu = true;
+    private bool showAccountsMenu = false;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void ToggleAccountsMenu()
+    {
+        showAccountsMenu = !showAccountsMenu;
     }
 }

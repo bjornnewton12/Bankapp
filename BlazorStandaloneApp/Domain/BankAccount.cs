@@ -79,6 +79,11 @@ public class BankAccount : IBankAccount
             throw new ArgumentException("Withdraw must be higher than 0");
         }
 
+        if (amount > Balance)
+        {
+            throw new InvalidOperationException("Insufficent funds.");
+        }
+
         Balance -= amount;
         LastUpdated = DateTime.UtcNow;
         Transactions.Add(new Transaction
@@ -99,6 +104,15 @@ public class BankAccount : IBankAccount
     /// <param name="amount"></param>
     public void TransferTo(BankAccount toAccount, decimal amount)
     {
+        if (amount <= 0)
+        {
+            throw new ArgumentException("Amount must be higher than 0.");
+        }
+
+        if (amount > Balance)
+        {
+            throw new InvalidOperationException("Insufficent funds.");
+        }
         // From which account
         Balance -= amount;
         LastUpdated = DateTime.Now;
