@@ -16,6 +16,7 @@ public class BankAccount : IBankAccount
     public decimal Balance { get; private set; }
     public DateTime LastUpdated { get; private set; }
     public List<Transaction> Transactions { get; private set; } = new();
+    public const decimal InterestRate = 0.02m;
 
     public List<Transaction> GetTransactions()
     {
@@ -113,6 +114,7 @@ public class BankAccount : IBankAccount
         {
             throw new InvalidOperationException("Insufficent funds.");
         }
+
         // From which account
         Balance -= amount;
         LastUpdated = DateTime.Now;
@@ -125,7 +127,7 @@ public class BankAccount : IBankAccount
             DateTime = DateTime.UtcNow,
             BalanceAfterTransaction = Balance
         });
-        
+
         // To which account
         toAccount.Balance += amount;
         toAccount.LastUpdated = DateTime.UtcNow;
@@ -138,5 +140,14 @@ public class BankAccount : IBankAccount
             DateTime = DateTime.UtcNow,
             BalanceAfterTransaction = toAccount.Balance
         });
+    }
+    
+    public decimal ApplyInterest ()
+    {
+        if (AccountType != AccountType.Savings)
+        {
+            return 0m;
+        }
+        return Balance * InterestRate;
     }
 }
