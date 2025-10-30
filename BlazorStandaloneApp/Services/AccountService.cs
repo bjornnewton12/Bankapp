@@ -70,6 +70,11 @@ namespace BlazorStandaloneApp.Services
             await IsInitialized();
             var account = _accounts.FirstOrDefault(z => z.Id == accountId);
 
+            if (account == null)
+            {
+                throw new ArgumentException("Select an account");
+            }
+
             account.Withdraw(amount); // Vad ska jag göra här?
 
             var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
@@ -82,6 +87,11 @@ namespace BlazorStandaloneApp.Services
         {
             await IsInitialized();
             var account = _accounts.FirstOrDefault(z => z.Id == accountId);
+
+            if (account == null)
+            {
+                throw new ArgumentException("Select an account");
+            }
 
             account.Deposit(amount); // Vad ska jag göra här?
 

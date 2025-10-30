@@ -107,7 +107,6 @@ code {
 }
 
 /* Jag har lagt till */
-
 /* Forms */
 .form-row {
     margin-bottom: 0.5rem;
@@ -259,14 +258,27 @@ h2 {
 }
 
 /* Images */
-.header img {
+/* Remove extra space between top bar and header image */
+.top-row.px-4 {
+    padding-top: 0 !important;
+}
+
+/* Make the image fill its container */
+.header {
     width: 100%;
     margin: 0;
     padding: 0;
 }
 
-/* Warning messages */
+.header img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: none;
+}
 
+
+/* Warning messages */
 .alert-danger {
     background-color: #dc3545;
     color: white;
@@ -294,4 +306,25 @@ h2 {
     align-items: center;      
     color: white;             
     text-decoration: none;   
+}
+
+/* Home page specific things */
+.home-page .header {
+    position: relative;
+    width: calc(100% + 3.5rem);
+    margin-left: -2.0rem;
+    margin-right: -2.0rem;
+    margin-top: -1.1rem;
+    overflow: hidden;
+}
+
+.home-page .header img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: none;
+}
+
+.home-page .home-content {
+    margin-top: 1.5rem;
 }

@@ -27,8 +27,9 @@ else
 
     <div class="form-row">
         <label>From account</label> 
-        <InputSelect @bind-Value="_withdrawModel.AccountId">
-            <option value="">Select account</option>
+        <InputSelect TValue="Guid"
+        @bind-Value="_withdrawModel.AccountId">
+            <option value="@Guid.Empty">Select account</option>
             @foreach (var account in _accounts)
             {
                 <option value="@account.Id.ToString()">@account.Name</option>
@@ -47,11 +48,11 @@ else
         @_withdrawErrorMessage
         </div>
     }
-    
-    @if (!string.IsNullOrEmpty(_successMessage))
+
+    @if (!string.IsNullOrEmpty(_withdrawSuccessMessage))
     {
         <div class="alert alert-success">
-        @_successMessage
+        @_withdrawSuccessMessage
         </div>
     }
 
@@ -69,8 +70,9 @@ else
 
     <div class="form-row">
         <label>To account</label> 
-        <InputSelect @bind-Value="_depositModel.AccountId">
-            <option value="">Select account</option>
+        <InputSelect TValue="Guid"
+        @bind-Value="_depositModel.AccountId">
+            <option value="@Guid.Empty">Select account</option>
             @foreach (var account in _accounts)
             {
                 <option value="@account.Id.ToString()">@account.Name</option>
@@ -90,10 +92,10 @@ else
         </div>
     }
 
-    @if (!string.IsNullOrEmpty(_successMessage))
+    @if (!string.IsNullOrEmpty(_depositSuccessMessage))
     {
         <div class="alert alert-success">
-        @_successMessage
+        @_depositSuccessMessage
         </div>
     }
 
@@ -112,7 +114,6 @@ else
             </li>
         }
     </ul>
-
 }
 
 @code
@@ -122,7 +123,8 @@ else
     private List<BankAccount> _accounts = new();
     private string? _withdrawErrorMessage;
     private string? _depositErrorMessage;
-    private string? _successMessage;
+    private string? _withdrawSuccessMessage;
+    private string? _depositSuccessMessage;
 
     private class TransactionModel
     {
@@ -138,34 +140,32 @@ else
     private async Task OnWithdrawAsync()
     {
         _withdrawErrorMessage = null;
-        _depositErrorMessage = null;
-        _successMessage = null;
+        _withdrawSuccessMessage = null;
 
         try
         {
         await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount);
         _accounts = await AccountService.GetAccounts();
         _withdrawErrorMessage = null;
-        _successMessage = "Successful withdraw";
+        _withdrawSuccessMessage = "Successful withdraw";
         }
         catch(Exception ex)
         {
-            _withdrawErrorMessage = ex.Message;
+           _withdrawErrorMessage = ex.Message;
         }
     }
 
     private async Task OnDepositAsync()
     {
-        _withdrawErrorMessage = null;
         _depositErrorMessage = null;
-        _successMessage = null;
+        _depositSuccessMessage = null;
 
         try 
         {
         await AccountService.Deposit(_depositModel.AccountId, _depositModel.Amount);
         _accounts = await AccountService.GetAccounts();
         _depositErrorMessage = null;
-        _successMessage = "Successful deposit";
+        _depositSuccessMessage = "Successful deposit";
         }
         catch (Exception ex)
         {
