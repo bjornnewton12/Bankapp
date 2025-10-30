@@ -4,8 +4,11 @@
 @using BlazorStandaloneApp.Domain
 
 <h1>History</h1>
-
-@if (_accounts.Count == 0)
+@if (_accounts == null)
+{
+    <p>Loading accounts</p>
+}
+else if (_accounts.Count == 0)
 {
     <p>No accounts</p>
 }
@@ -21,8 +24,29 @@ else
         }
         </InputSelect>
     </div>
+    
+    <div class="form-row">
+    <div class="col">
+        <label>From date</label>
+        <InputDate class="form-control" @bind-Value="filterFromDate" />
+    </div>
+    <div class="col">
+        <label>To date</label>
+        <InputDate class="form-control" @bind-Value="filterToDate" />
+    </div>
+    <div class="col">
+        <label>Transaction type</label>
+        <InputSelect class="form-select" @bind-Value="filterTransactionType">
+        <option value="">All</option>
+            @foreach (TransactionType type in Enum.GetValues(typeof(TransactionType)))
+                {
+                    <option value="@type">@type</option>
+                }
+        </InputSelect>
+    </div>
+    </div>
 
-    @if(!_selectedAccount.Transactions.Any()) // Vad ska jag göra här?
+    @if(_selectedAccount == null || _selectedAccount.Transactions == null || !_selectedAccount.Transactions.Any()) // Vad ska jag göra här?
     {
         <p>No transactions</p>
     }
@@ -68,10 +92,14 @@ else
 }
 
 @code {
-    private List<BankAccount>? _accounts; // Vad ska jag göra här?
+    private List<BankAccount>? _accounts;
     private List<Transaction> _transactions = new();
     private IBankAccount? _selectedAccount;
     private Guid _selectedAccountID;
+    private DateTime? filterFromDate;
+    private DateTime? filterToDate;
+    private TransactionType? filterTransactionType;
+
     // Start value
     private SortKey currentKey = SortKey.Date;
     private bool descending = true;
@@ -131,6 +159,17 @@ else
 
         // sortera lista, Datum och belopp
         var sortedList = _selectedAccount.Transactions.AsEnumerable();
+        
+        if (filterFromDate.HasValue)
+	        sortedList = sortedList.Where(t => t.DateTime.Date >= filterFromDate.Value.Date);
+ 
+        if (filterToDate.HasValue)
+	        sortedList = sortedList.Where(t => t.DateTime.Date <= filterToDate.Value.Date);
+ 
+        if (filterTransactionType.HasValue)
+	        sortedList = sortedList.Where(t => t.Type == filterTransactionType.Value);
+ 
+
         sortedList = currentKey switch // Vad ska jag göra här?
         {
             SortKey.Amount => (descending ? sortedList.OrderByDescending(t => t.Amount) 
@@ -145,5 +184,3 @@ else
         return sortedList;
     }
 }
-
-
