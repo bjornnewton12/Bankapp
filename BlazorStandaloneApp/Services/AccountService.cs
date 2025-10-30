@@ -56,7 +56,7 @@ namespace BlazorStandaloneApp.Services
             var fromAccount = _accounts.FirstOrDefault(x => x.Id == fromAccountId);
             var toAccount = _accounts.FirstOrDefault(y => y.Id == toAccountId);
 
-            fromAccount.TransferTo(toAccount, amount); // Vad ska jag göra här?
+            fromAccount!.TransferTo(toAccount!, amount);
 
             var allTransactions = _accounts
             .SelectMany(a => a.GetTransactions())

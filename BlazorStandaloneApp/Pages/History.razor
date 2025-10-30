@@ -170,7 +170,7 @@ else
 	        sortedList = sortedList.Where(t => t.Type == filterTransactionType.Value);
  
 
-        sortedList = currentKey switch // Vad ska jag göra här?
+        sortedList = currentKey switch
         {
             SortKey.Amount => (descending ? sortedList.OrderByDescending(t => t.Amount) 
             : sortedList.OrderBy(t => t.Amount)),
