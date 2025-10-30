@@ -46,7 +46,7 @@ else
     </div>
     </div>
 
-    @if(_selectedAccount == null || _selectedAccount.Transactions == null || !_selectedAccount.Transactions.Any()) // Vad ska jag göra här?
+    @if(_selectedAccount == null || _selectedAccount.Transactions == null || !_selectedAccount.Transactions.Any())
     {
         <p>No transactions</p>
     }
@@ -81,7 +81,7 @@ else
                 <td>
                     @if(transaction.FromAccount.HasValue || transaction.ToAccount.HasValue)
                     {
-                        <span>@(transaction.FromAccount.ToString()[..6]) ⭢ @(transaction.ToAccount.ToString()[..6])</span> // Vad ska jag göra här?
+                        <span>@(transaction.FromAccount!.Value.ToString()[..6]) ⭢ @(transaction.ToAccount!.Value.ToString()[..6])</span> // Vad ska jag göra här?
                     }
                 </td>
                 </tr>
@@ -92,7 +92,7 @@ else
 }
 
 @code {
-    private List<BankAccount>? _accounts;
+    private List<BankAccount> _accounts = new();
     private List<Transaction> _transactions = new();
     private IBankAccount? _selectedAccount;
     private Guid _selectedAccountID;
@@ -179,7 +179,9 @@ else
             SortKey.Type => (descending ? sortedList.OrderByDescending(t => t.Type) 
             : sortedList.OrderBy(t => t.Type)),
             SortKey.BalanceAfterTransaction => (descending ? sortedList.OrderByDescending(t => t.BalanceAfterTransaction) 
-            : sortedList.OrderBy(t => t.BalanceAfterTransaction))
+            : sortedList.OrderBy(t => t.BalanceAfterTransaction)),
+
+            _ => sortedList
         };
         return sortedList;
     }
