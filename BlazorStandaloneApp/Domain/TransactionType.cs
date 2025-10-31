@@ -1,5 +1,7 @@
 namespace BlazorStandaloneApp.Domain;
 
+
+
 public enum TransactionType
 {
     Deposit,

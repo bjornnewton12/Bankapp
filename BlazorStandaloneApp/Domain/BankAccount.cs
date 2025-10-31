@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace BlazorStandaloneApp.Domain;
 
 /// <summary>
-/// Sammanfattning av klassen
+/// Handles Bankaccount
 /// </summary>
 
 public class BankAccount : IBankAccount
@@ -31,6 +31,7 @@ public class BankAccount : IBankAccount
         CurrencyType = currencyType;
         Balance = balance;
         LastUpdated = DateTime.Now;
+        Console.WriteLine($"BankAccount: {Id} created '{Name}', {AccountType} with initial balance {Balance}.");
     }
 
     [JsonConstructor]
@@ -53,6 +54,7 @@ public class BankAccount : IBankAccount
     {
         if (amount <= 0)
         {
+            Console.WriteLine($"Bankaccount ERROR: Amount <= 0");
             throw new ArgumentException("Deposit must be higher than 0");
         }
 
@@ -77,11 +79,13 @@ public class BankAccount : IBankAccount
     {
         if (amount <= 0)
         {
+            Console.WriteLine("Bankaccount ERROR: Amount <= 0");
             throw new ArgumentException("Withdraw must be higher than 0");
         }
 
         if (amount > Balance)
         {
+            Console.WriteLine("Bankaccount ERROR: Amount > Balance");
             throw new InvalidOperationException("Insufficent funds.");
         }
 
@@ -107,11 +111,13 @@ public class BankAccount : IBankAccount
     {
         if (amount <= 0)
         {
+            Console.WriteLine($"Bankaccount ERROR: Amount <= 0");
             throw new ArgumentException("Amount must be higher than 0.");
         }
 
         if (amount > Balance)
         {
+            Console.WriteLine($"Bankaccount ERROR: Amount > Balance");
             throw new InvalidOperationException("Insufficent funds.");
         }
 
@@ -142,12 +148,18 @@ public class BankAccount : IBankAccount
         });
     }
     
-    public decimal ApplyInterest ()
+    /// <summary>
+    /// Apply interest to accounts
+    /// </summary>
+    /// <returns></returns>
+    public decimal ApplyInterest()
     {
         if (AccountType != AccountType.Savings)
         {
+            Console.WriteLine($"BankAccount: Not a savings account");
             return 0m;
         }
+        Console.WriteLine($"BankAccount: Interest applied");
         return Balance * InterestRate;
     }
 }

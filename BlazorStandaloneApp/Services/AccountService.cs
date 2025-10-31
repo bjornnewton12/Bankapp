@@ -14,11 +14,15 @@ namespace BlazorStandaloneApp.Services
             {
                 return;
             }
+            Console.WriteLine("AccountService: Initializing accounts from storage.");
+
             var fromStorage = await _storageService.GetItemAsync<List<BankAccount>>(StorageKey);
             _accounts.Clear();
+
             if (fromStorage is { Count: > 0 })
                 _accounts.AddRange(fromStorage);
             isLoaded = true;
+            Console.WriteLine("AccountService: Loaded accounts from storage.");
         }
 
         private Task SaveAsync() => _storageService.SetItemAsync(StorageKey, _accounts);
@@ -29,12 +33,14 @@ namespace BlazorStandaloneApp.Services
             var account = new BankAccount(name, accountType, currencyType, initialBalance);
             _accounts.Add(account);
             await SaveAsync();
+            Console.WriteLine($"AccountService: Account {name} created with initial balance {initialBalance}.");
             return account;
         }
 
         public async Task<List<BankAccount>> GetAccounts()
         {
             await IsInitialized();
+            Console.WriteLine("AccountService: Accounts collected.");
             return _accounts.Cast<BankAccount>().ToList();
         }
 
@@ -47,6 +53,7 @@ namespace BlazorStandaloneApp.Services
             {
                 _accounts.Remove(accountToRemove);
                 await SaveAsync();
+                Console.WriteLine($"AccountService: Account removed.");
             }
         }
 
@@ -63,6 +70,7 @@ namespace BlazorStandaloneApp.Services
             .ToList();
 
             await _storageService.SetItemAsync(StorageKey, _accounts);
+            Console.WriteLine($"AccountService: Transfer completed {amount} kr from account {fromAccountId} to {toAccountId}.");
         }
 
         public async Task Withdraw(Guid accountId, decimal amount)
@@ -72,15 +80,17 @@ namespace BlazorStandaloneApp.Services
 
             if (account == null)
             {
+                Console.WriteLine("AccountService ERROR: ArgumentException because Account == null.");
                 throw new ArgumentException("Select an account");
             }
 
-            account.Withdraw(amount); // Vad ska jag göra här?
+            account.Withdraw(amount);
 
             var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
             await _storageService.SetItemAsync("transactions", allTransactions);
 
             await SaveAsync();
+            Console.WriteLine("AccountService: Amount withdrawn.");
         }
         
         public async Task Deposit(Guid accountId, decimal amount)
@@ -90,15 +100,17 @@ namespace BlazorStandaloneApp.Services
 
             if (account == null)
             {
+                Console.WriteLine("AccountService ERROR: ArgumentException because Account == null.");
                 throw new ArgumentException("Select an account");
             }
 
-            account.Deposit(amount); // Vad ska jag göra här?
+            account.Deposit(amount);
 
             var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
             await _storageService.SetItemAsync("transactions", allTransactions);
 
             await SaveAsync();
+            Console.WriteLine("AccountService: Amount deposited.");
         }
     }
 }

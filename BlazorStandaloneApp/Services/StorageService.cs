@@ -4,6 +4,10 @@ using Microsoft.JSInterop;
 
 namespace BlazorStandaloneApp.Services;
 
+/// <summary>
+/// Service for storing service
+/// </summary>
+
 public class StorageService : IStorageService
 {
     private readonly IJSRuntime _jsRuntime;
@@ -13,7 +17,7 @@ public class StorageService : IStorageService
         Converters = { new JsonStringEnumConverter() }
     };
 
-    public StorageService(IJSRuntime jsRuntime) 
+    public StorageService(IJSRuntime jsRuntime)
     {
         _jsRuntime = jsRuntime;
     }
@@ -23,6 +27,7 @@ public class StorageService : IStorageService
     {
         var json = JsonSerializer.Serialize(value, _jsonSerializerOptions);
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, json);
+        Console.WriteLine($"StorageService: SetItemAsync completed for key.");
     }
 
     // Collect
@@ -31,8 +36,10 @@ public class StorageService : IStorageService
         var json = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
         if (string.IsNullOrEmpty(json))
         {
+            Console.WriteLine($"StorageService WARNING: No data found for key '{key}'.");
             return default!;
         }
+        Console.WriteLine($"StorageService: GetItemAsync collected for key.");
         return JsonSerializer.Deserialize<T>(json, _jsonSerializerOptions)!;
     }
 }
