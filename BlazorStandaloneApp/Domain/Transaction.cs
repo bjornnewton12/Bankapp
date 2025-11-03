@@ -1,6 +1,6 @@
 /// <summary>
-/// Represents a single transaction within a bank account, including details such as 
-/// amount, type, related accounts, and balance after the transaction.
+/// Represents a single transaction within a bank account, including details
+/// such as amount, type, related accounts, and balance after the transaction.
 /// </summary>
 
 namespace BlazorStandaloneApp.Domain

@@ -5,6 +5,7 @@ namespace BlazorStandaloneApp.Interfaces
     /// including balance management, transaction history, and 
     /// methods for withdrawing, depositing, and transferring funds.
     /// </summary>
+    
     public interface IBankAccount
     {
         Guid Id { get; }
