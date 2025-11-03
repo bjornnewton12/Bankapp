@@ -16,7 +16,7 @@ Once the application is running, you can navigate through the following pages:
 * 🏠 Home
   * The landing page.
  
-* 🏦 New Account (/accounts)
+* 💳 New Account (/accounts)
   * Create a new bank account by specifying:
     * Name.
     * Account Type (Deposit or Savings).
@@ -28,7 +28,7 @@ Once the application is running, you can navigate through the following pages:
    * Shows balance, interest rate, accumulated interest, and last updated date.
    * Accounts with a zero balance can be removed.
   
- * 💸 Withdraw & Deposit (/withdraw-deposit)
+ * 🪙 Withdraw & Deposit (/withdraw-deposit)
    * Withdraw from or deposit into an existing account.
    * Displays real-time success or error messages.
    * Updates balances immediately after each transaction.
@@ -38,7 +38,7 @@ Once the application is running, you can navigate through the following pages:
    * Prevents invalid transactions (same account or empty selection).
    * Displays confirmation messages after successful transfers.
   
- * 📜 History (/history)
+ * ⌛ History (/history)
    * View all transactions for a selected account.
      * Filter by:
        * Date range
@@ -53,9 +53,9 @@ Once the application is running, you can navigate through the following pages:
 ## Credits
 
 Developed by: bjornnewton12
-- Technologies Used:
-- Blazor WebAssembly (.NET 8)
-- C#
-- JavaScript Interop (IJSRuntime)
-- Local Storage API
-- HTML & CSS
+* Technologies Used:
+  * Blazor WebAssembly (.NET 8)
+  * C#
+  * JavaScript Interop (IJSRuntime)
+  * Local Storage API
+  * HTML & CSS
