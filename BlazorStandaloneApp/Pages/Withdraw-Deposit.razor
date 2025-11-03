@@ -4,6 +4,13 @@
 @using BlazorStandaloneApp.Services
 @inject IAccountService AccountService
 
+@* 
+Summary:
+Provides functionality for performing withdrawals and deposits on existing 
+accounts. Displays confirmation or error messages and updates balances in real-time.
+*@
+
+
 <PageTitle>Withdraw & Deposit</PageTitle>
 
 <h1>Withdraw & Deposit</h1>
@@ -27,8 +34,9 @@ else
 
     <div class="form-row">
         <label>From account</label> 
-        <InputSelect @bind-Value="_withdrawModel.AccountId">
-            <option value="">Select account</option>
+        <InputSelect TValue="Guid"
+        @bind-Value="_withdrawModel.AccountId">
+            <option value="@Guid.Empty">Select account</option>
             @foreach (var account in _accounts)
             {
                 <option value="@account.Id.ToString()">@account.Name</option>
@@ -48,6 +56,13 @@ else
         </div>
     }
 
+    @if (!string.IsNullOrEmpty(_withdrawSuccessMessage))
+    {
+        <div class="alert alert-success">
+        @_withdrawSuccessMessage
+        </div>
+    }
+
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 </div>
@@ -62,8 +77,9 @@ else
 
     <div class="form-row">
         <label>To account</label> 
-        <InputSelect @bind-Value="_depositModel.AccountId">
-            <option value="">Select account</option>
+        <InputSelect TValue="Guid"
+        @bind-Value="_depositModel.AccountId">
+            <option value="@Guid.Empty">Select account</option>
             @foreach (var account in _accounts)
             {
                 <option value="@account.Id.ToString()">@account.Name</option>
@@ -83,11 +99,19 @@ else
         </div>
     }
 
+    @if (!string.IsNullOrEmpty(_depositSuccessMessage))
+    {
+        <div class="alert alert-success">
+        @_depositSuccessMessage
+        </div>
+    }
+
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 </div>
 </div>
 
+<!-- Display accounts -->
 <h2>Account balances</h2>
     <ul>
         @foreach (var account in _accounts)
@@ -98,7 +122,6 @@ else
             </li>
         }
     </ul>
-
 }
 
 @code
@@ -108,39 +131,53 @@ else
     private List<BankAccount> _accounts = new();
     private string? _withdrawErrorMessage;
     private string? _depositErrorMessage;
+    private string? _withdrawSuccessMessage;
+    private string? _depositSuccessMessage;
 
+    // Model for both deposit and withdraw forms
     private class TransactionModel
     {
         public Guid AccountId { get; set; }
         public decimal Amount { get; set; }
     }
 
+    // Load all accounts when the page initializes
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
     }
 
+    // Load all accounts when the page initializes
     private async Task OnWithdrawAsync()
     {
+        _withdrawErrorMessage = null;
+        _withdrawSuccessMessage = null;
+
         try
         {
         await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount);
         _accounts = await AccountService.GetAccounts();
         _withdrawErrorMessage = null;
+        _withdrawSuccessMessage = "Successful withdraw";
         }
         catch(Exception ex)
         {
-            _withdrawErrorMessage = ex.Message;
+           _withdrawErrorMessage = ex.Message;
         }
     }
 
+    // Handle deposit form submission
     private async Task OnDepositAsync()
     {
+        _depositErrorMessage = null;
+        _depositSuccessMessage = null;
+
         try 
         {
         await AccountService.Deposit(_depositModel.AccountId, _depositModel.Amount);
         _accounts = await AccountService.GetAccounts();
-        _withdrawErrorMessage = null;
+        _depositErrorMessage = null;
+        _depositSuccessMessage = "Successful deposit";
         }
         catch (Exception ex)
         {

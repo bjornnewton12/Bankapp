@@ -1,8 +1,11 @@
-using System;
+/// <summary>
+/// Represents a single transaction within a bank account, including details such as 
+/// amount, type, related accounts, and balance after the transaction.
+/// </summary>
 
 namespace BlazorStandaloneApp.Domain
 {
-        public class Transaction
+    public class Transaction
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public decimal Amount { get; set; }

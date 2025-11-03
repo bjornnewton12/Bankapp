@@ -4,6 +4,13 @@
 @using BlazorStandaloneApp.Services
 @inject IAccountService AccountService
 
+@* 
+Summary:
+Allows users to transfer funds between two existing accounts. 
+Displays success or error messages based on validation and transaction results.
+*@
+
+
 <PageTitle>Account transaction</PageTitle>
 
 <h1>Account transaction</h1>
@@ -51,6 +58,13 @@ else
         </div>
     }
 
+    @if (!string.IsNullOrEmpty(_successMessage))
+    {
+        <div class="alert alert-success">
+        @_successMessage
+        </div>
+    }
+
     <button type="submit" class="btn-submit">Create transaction</button>
 </EditForm>
 }
@@ -71,7 +85,9 @@ else
     private List<BankAccount> _accounts = new();
     private List<BankAccount> _toAccounts= new();
     private string? _errorMessage;
+    private string? _successMessage;
 
+    // Form model for transferring funds between accounts
     private class TransferFormModel
     {
         public Guid FromAccountId { get; set; }
@@ -79,15 +95,18 @@ else
         public decimal Amount { get; set; }
     }
 
+    // Load all accounts on page initialization
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
         _toAccounts = _accounts;
     }
 
+    // Handle form submission for account transfers
     private async Task OnSubmitAsync()
     {
         _errorMessage = null;
+        _successMessage = null;
 
         if (_model.FromAccountId == Guid.Empty || _model.ToAccountId == Guid.Empty)
         {
@@ -118,6 +137,7 @@ else
             var to = _accounts.First(x => x.Id == _model.ToAccountId);
 
             _model.Amount = 0;
+            _successMessage = "Transfer completed";
             StateHasChanged();
         }
         catch (ArgumentException ex)
@@ -135,6 +155,8 @@ else
         return;
     }    
 
+        
+        // Handle account dropdown changes
         private void HandleFormChanged(ChangeEventArgs eventArgs)
         {
             if (Guid.TryParse(eventArgs.Value?.ToString(), out var id))
@@ -143,6 +165,7 @@ else
             }
         }
 
+        // Update "To account" list when a "From account" is selected
         private void OnFormChanged(Guid fromId)
         {
             _model.FromAccountId = fromId;

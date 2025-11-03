@@ -3,6 +3,11 @@
 @using BlazorStandaloneApp.Domain
 @using System.ComponentModel.DataAnnotations
 
+@* 
+Summary:
+Page for creating new bank accounts and displaying a list of existing accounts with their balances.
+*@
+
 <PageTitle>New account</PageTitle>
 
 <h1>New account</h1>
@@ -25,16 +30,6 @@
     </div>
 
     <div class="form-row">
-        <label>Currency</label>
-        <InputSelect @bind-Value="_model.CurrencyType">
-            <option value="">Select currency</option>
-            <option value="@CurrencyType.SEK">SEK</option>
-            <option value="@CurrencyType.Euro">£</option>
-            <option value="@CurrencyType.Dollar">$</option>
-        </InputSelect>
-    </div>
-
-    <div class="form-row">
         <label>Starting balance</label>
         <InputNumber @bind-Value="_model.InitialBalance"></InputNumber>
     </div>
@@ -42,8 +37,7 @@
     <button type="submit" class="btn-submit">Create account</button>
 </EditForm>
 
-<!-- Add accounts -->
-
+<!-- Display accounts -->
 <h2>Account balances</h2>
 @if(_accounts.Count == 0)
 {
@@ -66,18 +60,19 @@ else
     private CreateAccountModel _model = new();
     private List<BankAccount> _accounts = new();
 
+    // Load all accounts when the page initializes
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
     }
 
+    // Create a new account and refresh the account list
     private async Task CreateAccountAsync()
     {
         try{
             await AccountService.CreateAccount(
-            _model.Name, // Vad ska jag göra här?
+            _model.Name!,
             _model.AccountType,
-            _model.CurrencyType,
             _model.InitialBalance);
             _accounts = await AccountService.GetAccounts();
             _model.Clear();
@@ -89,18 +84,18 @@ else
         }
     }
 
+    // Model for form data and validation
     private class CreateAccountModel
     {
         [Required(ErrorMessage = "Please add an account name")]
         public string? Name { get; set; }
         public AccountType AccountType { get; set; }
-        public CurrencyType CurrencyType { get; set; }
         public decimal InitialBalance { get; set; } = 0;
 
+        // Clear forms
         public void Clear()
         {
             Name = string.Empty;
-            CurrencyType = default;
             InitialBalance = 0;
             AccountType = default;
         }
