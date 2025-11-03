@@ -3,6 +3,13 @@
 @inject IStorageService StorageService;
 @using BlazorStandaloneApp.Domain
 
+@* 
+Summary:
+Displays transaction history with sorting and filtering options 
+(by date range, transaction type, and amount).
+*@
+
+
 <h1>History</h1>
 @if (_accounts == null)
 {
@@ -104,7 +111,7 @@ else
     private SortKey currentKey = SortKey.Date;
     private bool descending = true;
 
-    //Sorting variants
+    //Sorting keys for table
     private enum SortKey
     {
         Date,
@@ -113,6 +120,7 @@ else
         BalanceAfterTransaction
     }
 
+    // Change the current sorting key or reverse sort order
     private void SetSort(SortKey sortKey)
     {
         if (currentKey == sortKey)
@@ -126,6 +134,7 @@ else
         }
     }
 
+    // Keeps track of which account is selected in the dropdown
     private Guid SelectedAccountId
     {
         get => _selectedAccountID;
@@ -138,13 +147,14 @@ else
         }
     }
 
+    // Load accounts and initialize the first one on page load
     protected override async Task OnInitializedAsync()
     {
         var accounts = await AccountService.GetAccounts();
         _accounts = accounts.Cast<BankAccount>().ToList();
         _transactions = new();
 
-        // Om det finns konton i vår lista, välj första för att visa UI
+         // Select the first account by default if available
         if (_accounts.Count > 0)
         {
             _selectedAccountID = _accounts[0].Id;
@@ -152,6 +162,7 @@ else
         }
     }
 
+    // Filter and sort transactions based on user-selected criteria
     private IEnumerable<Transaction> sortedTransaction()
     {
         if (_selectedAccount == null)

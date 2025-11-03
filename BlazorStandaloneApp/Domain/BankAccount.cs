@@ -3,7 +3,8 @@ using System.Text.Json.Serialization;
 namespace BlazorStandaloneApp.Domain;
 
 /// <summary>
-/// Handles Bankaccount
+/// Handles bank account, including details such as balance, account type, 
+/// transactions, and methods for depositing, withdrawing, and transferring funds.
 /// </summary>
 
 public class BankAccount : IBankAccount
@@ -23,24 +24,25 @@ public class BankAccount : IBankAccount
         return Transactions;
     }
 
-    // Constructor
-    public BankAccount(string name, AccountType accountType, CurrencyType currencyType, decimal balance)
+    // Constructor for creating a new bank account with specified name, type, and starting balance.
+    public BankAccount(string name, AccountType accountType, decimal balance)
     {
         Name = name;
         AccountType = accountType;
-        CurrencyType = currencyType;
         Balance = balance;
         LastUpdated = DateTime.Now;
-        Console.WriteLine($"BankAccount: {Id} created '{Name}', {AccountType} with initial balance {Balance}.");
+        Console.WriteLine($"BankAccount INFO: {Id} created '{Name}', {AccountType} with initial balance {Balance}.");
     }
 
+    /// <summary>
+    /// JSON deserialization when loading existing accounts from storage.
+    /// </summary>
     [JsonConstructor]
-    public BankAccount(Guid id, string name, AccountType accountType, CurrencyType currencyType, decimal balance, DateTime lastUpdated, List<Transaction> transactions)
+    public BankAccount(Guid id, string name, AccountType accountType, decimal balance, DateTime lastUpdated, List<Transaction> transactions)
     {
         Id = id;
         Name = name;
         AccountType = accountType;
-        CurrencyType = currencyType;
         Balance = balance;
         LastUpdated = lastUpdated;
         Transactions = transactions ?? new List<Transaction>();
@@ -103,7 +105,7 @@ public class BankAccount : IBankAccount
     }
 
     /// <summary>
-    /// Transfers from specific account to which account
+    /// Transfers from specific account to specific account
     /// </summary>
     /// <param name="toAccount"></param>
     /// <param name="amount"></param>
@@ -156,10 +158,10 @@ public class BankAccount : IBankAccount
     {
         if (AccountType != AccountType.Savings)
         {
-            Console.WriteLine($"BankAccount: Not a savings account");
+            Console.WriteLine($"BankAccount INFO: Not a savings account");
             return 0m;
         }
-        Console.WriteLine($"BankAccount: Interest applied");
+        Console.WriteLine($"BankAccount INFO: Interest applied");
         return Balance * InterestRate;
     }
 }

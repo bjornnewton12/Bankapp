@@ -1,7 +1,9 @@
 namespace BlazorStandaloneApp.Interfaces
 {
     /// <summary>
-    /// Interface containing Bankaccount methods
+    /// Defines the structure and core operations of a bank account, 
+    /// including balance management, transaction history, and 
+    /// methods for withdrawing, depositing, and transferring funds.
     /// </summary>
     public interface IBankAccount
     {

@@ -1,4 +1,10 @@
 namespace BlazorStandaloneApp.Services
+
+/// <summary>
+/// Provides methods for managing bank accounts, including creation, deletion, deposits, withdrawals, and transfers.
+/// Handles loading and saving account data using the IStorageService.
+/// </summary>
+
 {
         public class AccountService : IAccountService
     {
@@ -8,13 +14,14 @@ namespace BlazorStandaloneApp.Services
         private bool isLoaded;
         public AccountService(IStorageService storageService) => _storageService = storageService;
 
+        // Ensure account data is loaded from storage before performing operations
         private async Task IsInitialized()
         {
             if (isLoaded)
             {
                 return;
             }
-            Console.WriteLine("AccountService: Initializing accounts from storage.");
+            Console.WriteLine("AccountService INFO: Initializing accounts from storage.");
 
             var fromStorage = await _storageService.GetItemAsync<List<BankAccount>>(StorageKey);
             _accounts.Clear();
@@ -22,28 +29,31 @@ namespace BlazorStandaloneApp.Services
             if (fromStorage is { Count: > 0 })
                 _accounts.AddRange(fromStorage);
             isLoaded = true;
-            Console.WriteLine("AccountService: Loaded accounts from storage.");
+            Console.WriteLine("AccountService INFO: Loaded accounts from storage.");
         }
 
         private Task SaveAsync() => _storageService.SetItemAsync(StorageKey, _accounts);
 
-        public async Task<BankAccount> CreateAccount(string name, AccountType accountType, CurrencyType currencyType, decimal initialBalance)
+        // Create a new bank account and save it to storage
+        public async Task<BankAccount> CreateAccount(string name, AccountType accountType, decimal initialBalance)
         {
             await IsInitialized();
-            var account = new BankAccount(name, accountType, currencyType, initialBalance);
+            var account = new BankAccount(name, accountType, initialBalance);
             _accounts.Add(account);
             await SaveAsync();
-            Console.WriteLine($"AccountService: Account {name} created with initial balance {initialBalance}.");
+            Console.WriteLine($"AccountService INFO: Account {name} created with initial balance {initialBalance}.");
             return account;
         }
 
+        // Retrieve all bank accounts
         public async Task<List<BankAccount>> GetAccounts()
         {
             await IsInitialized();
-            Console.WriteLine("AccountService: Accounts collected.");
+            Console.WriteLine("AccountService INFO: Accounts collected.");
             return _accounts.Cast<BankAccount>().ToList();
         }
 
+        // Delete a specific bank account
         public async Task DeleteAccount(IBankAccount account)
         {
             await IsInitialized();
@@ -53,10 +63,11 @@ namespace BlazorStandaloneApp.Services
             {
                 _accounts.Remove(accountToRemove);
                 await SaveAsync();
-                Console.WriteLine($"AccountService: Account removed.");
+                Console.WriteLine($"AccountService INFO: Account removed.");
             }
         }
 
+        // Transfer between two accounts
         public async Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount)
         {
             var fromStorage = await _storageService.GetItemAsync<List<BankAccount>>(StorageKey);
@@ -70,9 +81,10 @@ namespace BlazorStandaloneApp.Services
             .ToList();
 
             await _storageService.SetItemAsync(StorageKey, _accounts);
-            Console.WriteLine($"AccountService: Transfer completed {amount} kr from account {fromAccountId} to {toAccountId}.");
+            Console.WriteLine($"AccountService INFO: Transfer completed {amount} kr from account {fromAccountId} to {toAccountId}.");
         }
 
+        // Withdraw from specific account
         public async Task Withdraw(Guid accountId, decimal amount)
         {
             await IsInitialized();
@@ -90,9 +102,10 @@ namespace BlazorStandaloneApp.Services
             await _storageService.SetItemAsync("transactions", allTransactions);
 
             await SaveAsync();
-            Console.WriteLine("AccountService: Amount withdrawn.");
+            Console.WriteLine("AccountService INFO: Amount withdrawn.");
         }
         
+        // Deposit from specific account
         public async Task Deposit(Guid accountId, decimal amount)
         {
             await IsInitialized();
@@ -110,7 +123,7 @@ namespace BlazorStandaloneApp.Services
             await _storageService.SetItemAsync("transactions", allTransactions);
 
             await SaveAsync();
-            Console.WriteLine("AccountService: Amount deposited.");
+            Console.WriteLine("AccountService INFO: Amount deposited.");
         }
     }
 }

@@ -2,6 +2,13 @@
 @inject IAccountService AccountService;
 @using BlazorStandaloneApp.Domain
 
+@* 
+Summary:
+Displays all of the user's bank accounts with details such as type, balance, 
+interest rate, and last updated date. Allows removal of accounts with zero balance.
+*@
+
+
 <PageTitle>My accounts</PageTitle>
 
 <h1>My accounts</h1>
@@ -56,18 +63,19 @@ else
     private CreateAccountModel _model = new();
     private List<BankAccount> _accounts = new();
 
+    // Load all user accounts when the page initializes
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
     }
 
+    // Create a new account and refresh the list
     private async Task CreateAccountAsync()
     {
         try{
             await AccountService.CreateAccount(
             _model.Name!,
             _model.AccountType,
-            _model.CurrencyType,
             _model.InitialBalance);
 
             _accounts = await AccountService.GetAccounts();
@@ -79,6 +87,7 @@ else
         }
     }
 
+    // Remove an account (only possible if balance is zero)
     private async Task RemoveAccount(IBankAccount account)
     {
         try
@@ -92,17 +101,16 @@ else
         }
     }
 
+    // Model for handling new account creation (shared structure)
     private class CreateAccountModel
     {
         public string? Name { get; set; }
         public AccountType AccountType { get; set; }
-        public CurrencyType CurrencyType { get; set; }
         public decimal InitialBalance { get; set; } = 0;
 
         public void Clear()
         {
             Name = string.Empty;
-            CurrencyType = default;
             InitialBalance = 0;
             AccountType = default;
         }

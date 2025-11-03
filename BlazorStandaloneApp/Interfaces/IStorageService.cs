@@ -1,7 +1,8 @@
 namespace BlazorStandaloneApp.Interfaces;
 
 /// <summary>
-/// Interface containing StorageService methods
+/// Defines methods for storing and retrieving data asynchronously, 
+/// eg saving and loading objects from local or session storage.
 /// </summary>
 public interface IStorageService
 {

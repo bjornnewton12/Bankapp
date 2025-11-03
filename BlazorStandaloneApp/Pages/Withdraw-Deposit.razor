@@ -4,6 +4,13 @@
 @using BlazorStandaloneApp.Services
 @inject IAccountService AccountService
 
+@* 
+Summary:
+Provides functionality for performing withdrawals and deposits on existing 
+accounts. Displays confirmation or error messages and updates balances in real-time.
+*@
+
+
 <PageTitle>Withdraw & Deposit</PageTitle>
 
 <h1>Withdraw & Deposit</h1>
@@ -104,6 +111,7 @@ else
 </div>
 </div>
 
+<!-- Display accounts -->
 <h2>Account balances</h2>
     <ul>
         @foreach (var account in _accounts)
@@ -126,17 +134,20 @@ else
     private string? _withdrawSuccessMessage;
     private string? _depositSuccessMessage;
 
+    // Model for both deposit and withdraw forms
     private class TransactionModel
     {
         public Guid AccountId { get; set; }
         public decimal Amount { get; set; }
     }
 
+    // Load all accounts when the page initializes
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
     }
 
+    // Load all accounts when the page initializes
     private async Task OnWithdrawAsync()
     {
         _withdrawErrorMessage = null;
@@ -155,6 +166,7 @@ else
         }
     }
 
+    // Handle deposit form submission
     private async Task OnDepositAsync()
     {
         _depositErrorMessage = null;

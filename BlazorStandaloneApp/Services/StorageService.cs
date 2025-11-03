@@ -5,12 +5,15 @@ using Microsoft.JSInterop;
 namespace BlazorStandaloneApp.Services;
 
 /// <summary>
-/// Service for storing service
+/// Provides functionality for saving and retrieving data from the browser's local storage
+/// using JavaScript interop and JSON serialization.
 /// </summary>
 
 public class StorageService : IStorageService
 {
     private readonly IJSRuntime _jsRuntime;
+
+    // Configure JSON serialization options
     private JsonSerializerOptions _jsonSerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -22,15 +25,15 @@ public class StorageService : IStorageService
         _jsRuntime = jsRuntime;
     }
 
-    // Save
+    // Save an object to local storage as JSON
     public async Task SetItemAsync<T>(string key, T value)
     {
         var json = JsonSerializer.Serialize(value, _jsonSerializerOptions);
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, json);
-        Console.WriteLine($"StorageService: SetItemAsync completed for key.");
+        Console.WriteLine($"StorageService INFO: SetItemAsync completed for key.");
     }
 
-    // Collect
+    // Retrieve an object from local storage and deserialize it
     public async Task<T> GetItemAsync<T>(string key)
     {
         var json = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
@@ -39,7 +42,7 @@ public class StorageService : IStorageService
             Console.WriteLine($"StorageService WARNING: No data found for key '{key}'.");
             return default!;
         }
-        Console.WriteLine($"StorageService: GetItemAsync collected for key.");
+        Console.WriteLine($"StorageService INFO: GetItemAsync collected for key.");
         return JsonSerializer.Deserialize<T>(json, _jsonSerializerOptions)!;
     }
 }
