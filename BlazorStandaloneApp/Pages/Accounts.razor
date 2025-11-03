@@ -34,6 +34,20 @@ Page for creating new bank accounts and displaying a list of existing accounts w
         <InputNumber @bind-Value="_model.InitialBalance"></InputNumber>
     </div>
 
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert alert-danger">
+        @_errorMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(_successMessage))
+    {
+        <div class="alert alert-success">
+        @_successMessage
+        </div>
+    }
+
     <button type="submit" class="btn-submit">Create account</button>
 </EditForm>
 
@@ -59,6 +73,8 @@ else
 @code {
     private CreateAccountModel _model = new();
     private List<BankAccount> _accounts = new();
+    private string? _errorMessage;
+    private string? _successMessage;
 
     // Load all accounts when the page initializes
     protected override async Task OnInitializedAsync()
@@ -69,6 +85,16 @@ else
     // Create a new account and refresh the account list
     private async Task CreateAccountAsync()
     {
+        _errorMessage = null;
+        _successMessage = null;
+
+        if (string.IsNullOrWhiteSpace(_model.Name))
+            {
+                _errorMessage = "Please enter an account name.";
+                StateHasChanged();
+                return;
+            }
+
         try{
             await AccountService.CreateAccount(
             _model.Name!,
@@ -76,18 +102,19 @@ else
             _model.InitialBalance);
             _accounts = await AccountService.GetAccounts();
             _model.Clear();
-            StateHasChanged();
+            _successMessage = "Account successfully created.";
+            
         }
         catch (Exception exception)
         {
             Console.WriteLine(exception);
         }
+        StateHasChanged();
     }
 
     // Model for form data and validation
     private class CreateAccountModel
     {
-        [Required(ErrorMessage = "Please add an account name")]
         public string? Name { get; set; }
         public AccountType AccountType { get; set; }
         public decimal InitialBalance { get; set; } = 0;

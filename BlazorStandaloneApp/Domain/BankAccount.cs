@@ -31,7 +31,6 @@ public class BankAccount : IBankAccount
         AccountType = accountType;
         Balance = balance;
         LastUpdated = DateTime.Now;
-        Console.WriteLine($"BankAccount INFO: {Id} created '{Name}', {AccountType} with initial balance {Balance}.");
     }
 
     /// <summary>

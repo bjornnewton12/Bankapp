@@ -38,10 +38,17 @@ namespace BlazorStandaloneApp.Services
         public async Task<BankAccount> CreateAccount(string name, AccountType accountType, decimal initialBalance)
         {
             await IsInitialized();
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("AccountService ERROR: Attempted to create account with empty or null name.");
+                throw new ArgumentException("Account name cannot be empty.");
+            }
+
             var account = new BankAccount(name, accountType, initialBalance);
             _accounts.Add(account);
             await SaveAsync();
-            Console.WriteLine($"AccountService INFO: Account {name} created with initial balance {initialBalance}.");
+            Console.WriteLine($"AccountService INFO: Account created with initial balance {initialBalance}.");
             return account;
         }
 
