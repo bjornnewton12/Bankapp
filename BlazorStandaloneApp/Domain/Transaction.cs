@@ -15,7 +15,7 @@ namespace BlazorStandaloneApp.Domain
         public Guid? FromAccount { get; set; }
         public Guid? ToAccount { get; set; }
         public CurrencyType CurrencyType { get; set; }
-        public ExpenseCategory Category { get; set; } // Added 2025-11-04
+        public ExpenseCategory Category { get; set; }
         public string? RelatedAccountName { get; private set; }
         public string? Description { get; private set; }
     }
