@@ -48,7 +48,7 @@ else
     <label>Expense category</label>
     <InputSelect TValue="ExpenseCategory"
     @bind-Value="_withdrawModel.Category">
-    <option value="">Select category</option>
+    <option value="@Guid.Empty">Select category</option>
     @foreach (ExpenseCategory category in Enum.GetValues(typeof(ExpenseCategory)))
     {
         <option value="@category">@category</option>
