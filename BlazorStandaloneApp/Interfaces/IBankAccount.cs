@@ -14,7 +14,7 @@ namespace BlazorStandaloneApp.Interfaces
         decimal Balance { get; }
         DateTime LastUpdated { get; }
         List <Transaction> Transactions { get; }
-        void Withdraw(decimal amount);
+        void Withdraw(decimal amount, ExpenseCategory category);
         void Deposit(decimal amount);
         void TransferTo(BankAccount toAccount , decimal amount);
     }

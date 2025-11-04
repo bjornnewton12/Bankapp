@@ -92,7 +92,7 @@ namespace BlazorStandaloneApp.Services
         }
 
         // Withdraw from specific account
-        public async Task Withdraw(Guid accountId, decimal amount)
+        public async Task Withdraw(Guid accountId, decimal amount, ExpenseCategory category)
         {
             await IsInitialized();
             var account = _accounts.FirstOrDefault(z => z.Id == accountId);
@@ -103,7 +103,7 @@ namespace BlazorStandaloneApp.Services
                 throw new ArgumentException("Select an account");
             }
 
-            account.Withdraw(amount);
+            account.Withdraw(amount, category);
 
             var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
             await _storageService.SetItemAsync("transactions", allTransactions);

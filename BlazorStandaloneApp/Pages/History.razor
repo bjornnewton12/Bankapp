@@ -83,7 +83,7 @@ else
                 <tr>
                 <td>@transaction.DateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
                 <td>@transaction.Amount @transaction.CurrencyType</td>
-                <td>@transaction.Type</td>
+                <td>@transaction.Type - @transaction.Category</td>
                 <td>@transaction.BalanceAfterTransaction @transaction.CurrencyType</td>
                 <td>
                     @if(transaction.FromAccount.HasValue || transaction.ToAccount.HasValue)
