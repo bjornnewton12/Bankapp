@@ -31,14 +31,13 @@ public class BankAccount : IBankAccount
         AccountType = accountType;
         Balance = balance;
         LastUpdated = DateTime.Now;
-        Console.WriteLine($"BankAccount INFO: {Id} created '{Name}', {AccountType} with initial balance {Balance}.");
     }
 
     /// <summary>
     /// JSON deserialization when loading existing accounts from storage.
     /// </summary>
     [JsonConstructor]
-    public BankAccount(Guid id, string name, AccountType accountType, decimal balance, DateTime lastUpdated, List<Transaction> transactions)
+    public BankAccount(Guid id, string name, AccountType accountType, decimal balance, DateTime lastUpdated, List<Transaction> transactions) // Add , ExpenseCategory expenseCategory ?
     {
         Id = id;
         Name = name;
@@ -77,7 +76,7 @@ public class BankAccount : IBankAccount
     /// Withdraw specific amount from account balance
     /// </summary>
     /// <param name="amount"></param>
-    public void Withdraw(decimal amount)
+    public void Withdraw(decimal amount, ExpenseCategory category)
     {
         if (amount <= 0)
         {
@@ -100,7 +99,8 @@ public class BankAccount : IBankAccount
             FromAccount = Id,
             ToAccount = Id,
             DateTime = DateTime.UtcNow,
-            BalanceAfterTransaction = Balance
+            BalanceAfterTransaction = Balance,
+            Category = category
         });
     }
 

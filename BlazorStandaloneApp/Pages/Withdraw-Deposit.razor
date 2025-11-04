@@ -44,6 +44,18 @@ else
     </div>
 
     <div class="form-row">
+    <label>Expense category</label>
+    <InputSelect TValue="ExpenseCategory"
+    @bind-Value="_withdrawModel.Category">
+    <option value="@Guid.Empty">Select category</option>
+    @foreach (ExpenseCategory category in Enum.GetValues(typeof(ExpenseCategory)))
+    {
+        <option value="@category">@category</option>
+    }
+    </InputSelect>
+    </div>
+
+    <div class="form-row">
         <label>Amount</label>
         <InputNumber TValue="decimal" @bind-Value="_withdrawModel.Amount"></InputNumber>
     </div>
@@ -138,6 +150,7 @@ else
     {
         public Guid AccountId { get; set; }
         public decimal Amount { get; set; }
+        public ExpenseCategory Category { get; set; }
     }
 
     // Load all accounts when the page initializes
@@ -154,7 +167,7 @@ else
 
         try
         {
-        await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount);
+        await AccountService.Withdraw(_withdrawModel.AccountId, _withdrawModel.Amount, _withdrawModel.Category);
         _accounts = await AccountService.GetAccounts();
         _withdrawErrorMessage = null;
         _withdrawSuccessMessage = "Successful withdraw";

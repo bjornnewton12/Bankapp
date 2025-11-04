@@ -11,6 +11,6 @@ public interface IAccountService
     Task<List<BankAccount>> GetAccounts();
     Task DeleteAccount(IBankAccount account);
     Task Transfer(Guid fromAccountId, Guid toAccountId, decimal amount);
-    Task Withdraw(Guid accountId, decimal amount);
+    Task Withdraw(Guid accountId, decimal amount, ExpenseCategory category);
     Task Deposit(Guid accountId, decimal amount);
 }

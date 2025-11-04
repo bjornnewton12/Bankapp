@@ -2,6 +2,7 @@
 @inject IAccountService AccountService;
 @inject IStorageService StorageService;
 @using BlazorStandaloneApp.Domain
+@using System.ComponentModel
 
 @* 
 Summary:
@@ -85,7 +86,16 @@ else
                 <tr>
                 <td>@transaction.DateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
                 <td>@transaction.Amount @transaction.CurrencyType</td>
-                <td>@transaction.Type</td>
+                <td>
+                    @if (transaction.Type == TransactionType.Withdraw)
+                    {
+                        <span>@transaction.Type: @transaction.Category</span>
+                    }
+                    else
+                    {
+                        @transaction.Type
+                    }
+                </td>
                 <td>@transaction.BalanceAfterTransaction @transaction.CurrencyType</td>
                 <td>
                     @if(transaction.FromAccount.HasValue || transaction.ToAccount.HasValue)

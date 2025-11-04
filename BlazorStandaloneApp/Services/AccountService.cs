@@ -38,10 +38,17 @@ namespace BlazorStandaloneApp.Services
         public async Task<BankAccount> CreateAccount(string name, AccountType accountType, decimal initialBalance)
         {
             await IsInitialized();
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("AccountService ERROR: Attempted to create account with empty or null name.");
+                throw new ArgumentException("Account name cannot be empty.");
+            }
+
             var account = new BankAccount(name, accountType, initialBalance);
             _accounts.Add(account);
             await SaveAsync();
-            Console.WriteLine($"AccountService INFO: Account {name} created with initial balance {initialBalance}.");
+            Console.WriteLine($"AccountService INFO: Account created with initial balance {initialBalance}.");
             return account;
         }
 
@@ -85,7 +92,7 @@ namespace BlazorStandaloneApp.Services
         }
 
         // Withdraw from specific account
-        public async Task Withdraw(Guid accountId, decimal amount)
+        public async Task Withdraw(Guid accountId, decimal amount, ExpenseCategory category)
         {
             await IsInitialized();
             var account = _accounts.FirstOrDefault(z => z.Id == accountId);
@@ -96,7 +103,7 @@ namespace BlazorStandaloneApp.Services
                 throw new ArgumentException("Select an account");
             }
 
-            account.Withdraw(amount);
+            account.Withdraw(amount, category);
 
             var allTransactions = _accounts.SelectMany(z => z.GetTransactions()).ToList();
             await _storageService.SetItemAsync("transactions", allTransactions);
