@@ -2,6 +2,8 @@
 @using BlazorStandaloneApp.Domain
 @using BlazorStandaloneApp.Interfaces
 @using BlazorStandaloneApp.Services
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager Navigation
 @inject IAccountService AccountService
 
 @* 
@@ -94,7 +96,7 @@ else
         public decimal Amount { get; set; }
     }
 
-    // Load all accounts on page initialization
+    // Check if page is authenticated and load all accounts on page initialization
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();

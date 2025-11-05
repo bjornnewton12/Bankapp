@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject IAuthenticationService AuthenticationService
+@inject NavigationManager Navigation
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BK Bank</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -14,6 +17,10 @@
                 <span class="bi bi-house" aria-hidden="true"></span> Home
             </NavLink>
         </div>
+
+    <!-- Only visible when logged in -->
+    @if (isLoggedIn)
+    {
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="withdraw-deposit">
                 <span class="bi bi-database" aria-hidden="true"></span> Withdraw & Deposit
@@ -48,20 +55,41 @@
                 <span class="bi bi-clock-history" aria-hidden="true"></span> History
             </NavLink>
         </div>
+    }
         <div class="nav-item px-3">
             <a class="nav-link" href="https://learn.microsoft.com/aspnet/core/" target="_blank" rel="noopener noreferrer">
                 <span class="bi bi-info-circle" aria-hidden="true"></span> About (External link)
             </a>
         </div>
 
-        
-
+        <div class="nav-item px-3">
+        @if (isLoggedIn)
+        {
+            <NavLink class="nav-link" @onclick="LogoutAsync">
+            <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Logout</NavLink>
+        }
+        </div>
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
     private bool showAccountsMenu = false;
+    private bool isLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoggedIn = await AuthenticationService.IsLoggedInAsync();
+        AuthenticationService.OnAuthStateChanged += AuthStateChanged;
+    }
+
+    private async Task LogoutAsync()
+    {
+        await AuthenticationService.LogoutAsync();
+        isLoggedIn = false;
+        Navigation.NavigateTo("/");
+        StateHasChanged();
+    }
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -73,5 +101,16 @@
     private void ToggleAccountsMenu()
     {
         showAccountsMenu = !showAccountsMenu;
+    }
+
+    private async void AuthStateChanged()
+    {
+        isLoggedIn = await AuthenticationService.IsLoggedInAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        AuthenticationService.OnAuthStateChanged -= AuthStateChanged;
     }
 }

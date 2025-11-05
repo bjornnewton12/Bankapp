@@ -1,5 +1,7 @@
 @page "/history"
 @inject IAccountService AccountService;
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager Navigation
 @inject IStorageService StorageService;
 @using BlazorStandaloneApp.Domain
 @using System.ComponentModel
@@ -159,7 +161,7 @@ else
         }
     }
 
-    // Load accounts and initialize the first one on page load
+    // Check if page is authenticated, load accounts and initialize the first one on page load
     protected override async Task OnInitializedAsync()
     {
         var accounts = await AccountService.GetAccounts();
