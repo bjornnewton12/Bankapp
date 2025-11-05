@@ -1,19 +1,22 @@
 ﻿@page "/"
+@inject IAuthenticationService AuthenticationService
+@using BlazorStandaloneApp.Domain
+@using BlazorStandaloneApp.Services
 
 @*
 Summary:
-Home page
+Home page with login
 *@
 
 <PageTitle>Home</PageTitle>
 
 <div class="home-page">
     <div class="header">
-        <img src="images/pexels-ron-lach-9654034.jpg" alt="BK Bank Home" />
+        <img src="/images/pexels-olly-787472.jpg" alt="BK Bank Home" />
+        <h1 class="hero-title">Welcome to BK Bank</h1>
     </div>
 
     <div class="home-content">
-        <h1>Welcome to BK Bank</h1>
         <p>
             We make banking simple, smart, and (dare we say) enjoyable. From tracking your spending
             to growing your savings, BK Bank gives you all the tools you need — without the financial jargon
@@ -23,5 +26,79 @@ Home page
             Fast transfers, clear insights, and support that actually supports you.
             Because your money should work for you — not the other way around.
         </p>
+        <div>
+        @if (!isLoggedIn)
+        {
+            <h2>Log in</h2>
+
+            <div class="form-row">
+                <label>Username</label>
+                <input @bind="username"/>
+                <label>PIN</label>
+                <input @bind="pin"/>
+                <button type="submit" class="btn-submit" @onclick="LoginAsync">Log in</button>
+            </div>
+            <p></p>    
+        
+        @if (loginFailed)
+            {
+                <p>Invalid username or PIN.</p>
+            }
+        }
+        </div>
     </div>
 </div>
+
+@code
+{
+    private string username = "";
+    private string pin = "";
+    private bool isLoggedIn;
+    private bool loginFailed;
+    private User? currentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoggedIn = await AuthenticationService.IsLoggedInAsync();
+        if (isLoggedIn)
+            {
+                currentUser = await AuthenticationService.GetUserAsync();
+            }
+        AuthenticationService.OnAuthStateChanged += AuthStateChanged;
+    }
+
+    private async Task LoginAsync()
+    {
+        loginFailed = false;
+
+        var success = await AuthenticationService.LoginAsync(username, pin);
+        if (success)
+        {
+            isLoggedIn = true;
+            currentUser = await AuthenticationService.GetUserAsync();
+        }
+        else
+        {
+            loginFailed = true;
+        }
+    }
+
+    private async void AuthStateChanged()
+    {
+        isLoggedIn = await AuthenticationService.IsLoggedInAsync();
+        if (isLoggedIn)
+        {
+            currentUser = await AuthenticationService.GetUserAsync();
+        }
+        else
+        {
+            currentUser = null;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        AuthenticationService.OnAuthStateChanged -= AuthStateChanged;
+    }
+}

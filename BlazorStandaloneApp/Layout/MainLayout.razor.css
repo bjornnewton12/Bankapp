@@ -19,6 +19,8 @@ main {
     height: 3.5rem;
     display: flex;
     align-items: center;
+    padding: 0 !important;          /* override Bootstrap's default navbar padding */
+    min-height: 3.5rem !important;
 }
 
     .top-row ::deep a, .top-row ::deep .btn-link {
@@ -41,6 +43,8 @@ main {
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
+        padding: 0 !important;
+        min-height: 3.5rem !important;
     }
 
     .top-row ::deep a, .top-row ::deep .btn-link {
@@ -76,4 +80,17 @@ main {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
+}
+
+/* Remove Bootstrap's extra spacing under the top-row navbar */
+.top-row + .nav-scrollable {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.navbar-collapse {
+    display: none !important; /* hides Bootstrap’s empty collapse area */
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }

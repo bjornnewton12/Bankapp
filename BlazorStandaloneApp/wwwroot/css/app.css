@@ -323,6 +323,21 @@ h2 {
     border: none;
 }
 
+.home-page .header .hero-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: clamp(1.5rem, 5vw, 8rem) !important;
+    text-align: center;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
 .home-page .home-content {
     margin-top: 1.5rem;
 }

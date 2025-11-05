@@ -2,6 +2,8 @@
 @using BlazorStandaloneApp.Domain
 @using BlazorStandaloneApp.Interfaces
 @using BlazorStandaloneApp.Services
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager Navigation
 @inject IAccountService AccountService
 
 @* 
@@ -153,7 +155,7 @@ else
         public ExpenseCategory Category { get; set; }
     }
 
-    // Load all accounts when the page initializes
+    // Check if page is authenticated and load all accounts when the page initializes
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();

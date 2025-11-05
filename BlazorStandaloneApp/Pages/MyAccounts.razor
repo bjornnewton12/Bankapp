@@ -1,5 +1,7 @@
 @page "/myAccounts"
 @inject IAccountService AccountService;
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager Navigation
 @using BlazorStandaloneApp.Domain
 
 @* 
@@ -57,12 +59,11 @@ else
     </table>
 }
 
-
 @code {
     private CreateAccountModel _model = new();
     private List<BankAccount> _accounts = new();
 
-    // Load all user accounts when the page initializes
+    // Check if page is authenticated and load all user accounts when the page initializes
     protected override async Task OnInitializedAsync()
     {
         _accounts = await AccountService.GetAccounts();
