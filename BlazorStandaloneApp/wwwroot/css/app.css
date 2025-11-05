@@ -141,6 +141,25 @@ code {
     gap: 0.5rem;
 }
 
+.login-row {
+    margin-bottom: 0.5rem;
+}
+
+.login-row input {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    height: 2.2rem;
+    padding: 0.3rem 0.3rem 0.3rem 0.5rem;
+    width: 250px; 
+}
+
+.login-row label {    
+    display: block;
+    margin-bottom: 0.5rem; 
+    font-weight: 500;      
+    color: black;
+}
+
 @media (min-width: 950px) {
     .form-container {
         display: flex;
@@ -328,7 +347,6 @@ h2 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     font-size: clamp(1.5rem, 5vw, 8rem) !important;
     text-align: center;
     z-index: 2;
