@@ -10,7 +10,6 @@
     </div>
 </div>
 
-
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
@@ -35,6 +34,7 @@
                 <span class="bi @(showAccountsMenu ? "bi-chevron-up" : "bi-chevron-down") float-end"></span>
             </button>
 
+            <!-- Only visible when Accounts is clicked -->
             @if (showAccountsMenu)
             {
                 <nav class="nav flex-column ms-4 sub-menu">
@@ -78,12 +78,14 @@
     private bool showAccountsMenu = false;
     private bool isLoggedIn;
 
+    // Check if user is logged in when the navigation menu initializes and subscribe to authentication changes
     protected override async Task OnInitializedAsync()
     {
         isLoggedIn = await AuthenticationService.IsLoggedInAsync();
         AuthenticationService.OnAuthStateChanged += AuthStateChanged;
     }
 
+    // Log out user, update login state and redirect to Home
     private async Task LogoutAsync()
     {
         await AuthenticationService.LogoutAsync();
@@ -104,12 +106,14 @@
         showAccountsMenu = !showAccountsMenu;
     }
 
+    // Update login state and refresh UI when authentication status changes
     private async void AuthStateChanged()
     {
         isLoggedIn = await AuthenticationService.IsLoggedInAsync();
         await InvokeAsync(StateHasChanged);
     }
 
+    // Unsubscribe from authentication state change events when component is disposed
     public void Dispose()
     {
         AuthenticationService.OnAuthStateChanged -= AuthStateChanged;

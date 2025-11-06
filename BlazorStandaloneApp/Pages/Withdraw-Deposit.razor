@@ -20,7 +20,6 @@ accounts. Displays confirmation or error messages and updates balances in real-t
 {
     <p>No accounts available. Please create one first.</p>
 }
-
 else
 {
 <div class="form-container">
@@ -32,11 +31,9 @@ else
 <EditForm Model="_withdrawModel" OnValidSubmit="OnWithdrawAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
     <div class="form-row">
         <label>From account</label> 
-        <InputSelect TValue="Guid"
-        @bind-Value="_withdrawModel.AccountId">
+        <InputSelect TValue="Guid" @bind-Value="_withdrawModel.AccountId">
             <option value="@Guid.Empty">Select account</option>
             @foreach (var account in _accounts)
             {
@@ -46,15 +43,14 @@ else
     </div>
 
     <div class="form-row">
-    <label>Expense category</label>
-    <InputSelect TValue="ExpenseCategory"
-    @bind-Value="_withdrawModel.Category">
-    <option value="@Guid.Empty">Select category</option>
-    @foreach (ExpenseCategory category in Enum.GetValues(typeof(ExpenseCategory)))
-    {
-        <option value="@category">@category</option>
-    }
-    </InputSelect>
+        <label>Expense category</label>
+        <InputSelect TValue="ExpenseCategory" @bind-Value="_withdrawModel.Category">
+            <option value="@Guid.Empty">Select category</option>
+            @foreach (ExpenseCategory category in Enum.GetValues(typeof(ExpenseCategory)))
+            {
+                <option value="@category">@category</option>
+            }
+        </InputSelect>
     </div>
 
     <div class="form-row">

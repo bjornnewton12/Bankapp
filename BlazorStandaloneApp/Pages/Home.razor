@@ -27,6 +27,8 @@ Home page with login
             Because your money should work for you — not the other way around.
         </p>
         <div>
+
+        <!-- Login (Only available when logged out) -->
         @if (!isLoggedIn)
         {
             <h2>Log in</h2>
@@ -52,8 +54,6 @@ Home page with login
     </div>
 </div>
 
-@*Invalid username or PIN.*@
-
 @code
 {
     private string username = "";
@@ -63,6 +63,8 @@ Home page with login
     private User? currentUser;
     private string? _errorMessage;
 
+    // Check if page is authenticated, load user data if logged in, and subscribe to authentication state changes
+  
     protected override async Task OnInitializedAsync()
     {
         isLoggedIn = await AuthenticationService.IsLoggedInAsync();
@@ -73,6 +75,7 @@ Home page with login
         AuthenticationService.OnAuthStateChanged += AuthStateChanged;
     }
 
+    // Attempt to log in using provided username and PIN, and update authentication state based on result
     private async Task LoginAsync()
     {
         loginFailed = false;
@@ -89,6 +92,7 @@ Home page with login
         }
     }
 
+   // Update authentication and user state when login status changes
     private async void AuthStateChanged()
     {
         isLoggedIn = await AuthenticationService.IsLoggedInAsync();
@@ -103,6 +107,7 @@ Home page with login
         await InvokeAsync(StateHasChanged);
     }
 
+    // Unsubscribe from authentication state change events when the component is disposed
     public void Dispose()
     {
         AuthenticationService.OnAuthStateChanged -= AuthStateChanged;

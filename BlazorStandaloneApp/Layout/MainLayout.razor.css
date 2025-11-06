@@ -19,7 +19,7 @@ main {
     height: 3.5rem;
     display: flex;
     align-items: center;
-    padding: 0 !important;          /* override Bootstrap's default navbar padding */
+    padding: 0 !important;
     min-height: 3.5rem !important;
 }
 
@@ -37,8 +37,6 @@ main {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
-
 
 @media (max-width: 640.98px) {
     .top-row {
@@ -82,14 +80,13 @@ main {
     }
 }
 
-/* Remove Bootstrap's extra spacing under the top-row navbar */
 .top-row + .nav-scrollable {
     margin-top: 0;
     padding-top: 0;
 }
 
 .navbar-collapse {
-    display: none !important; /* hides Bootstrap’s empty collapse area */
+    display: none !important;
     height: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
