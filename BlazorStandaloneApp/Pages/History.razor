@@ -14,6 +14,7 @@ Displays transaction history with sorting and filtering options (by date range, 
 <PageTitle>History</PageTitle>
 
 <h1>History</h1>
+<!-- History table -->
 
 @if (_accounts == null)
 {
@@ -23,7 +24,6 @@ else if (_accounts.Count == 0)
 {
     <p>No accounts</p>
 }
-<!-- History table -->
 else
 {
     <div class="form-row">
@@ -36,7 +36,6 @@ else
         }
         </InputSelect>
     </div>
-    
     <div class="form-row">
     <div class="col">
         <label>From date</label>
@@ -103,7 +102,7 @@ else
                 <td>
                     @if(transaction.FromAccount.HasValue || transaction.ToAccount.HasValue)
                     {
-                        <span>@(transaction.FromAccount!.Value.ToString()[..6]) ⭢ @(transaction.ToAccount!.Value.ToString()[..6])</span> // Vad ska jag göra här?
+                        <span>@(transaction.FromAccount!.Value.ToString()[..6]) ⭢ @(transaction.ToAccount!.Value.ToString()[..6])</span>
                     }
                 </td>
                 </tr>

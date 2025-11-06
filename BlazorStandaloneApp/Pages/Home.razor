@@ -33,6 +33,13 @@ Home page with login
         {
             <h2>Log in</h2>
 
+            @if (loginFailed)
+            {
+                <div class="alert alert-danger">
+                Invalid username or PIN.
+                </div>
+            }
+
             <div class="login-row">
                 <label>Username</label>
                 <input @bind="username"/>
@@ -42,13 +49,6 @@ Home page with login
                 <input @bind="pin"/>
             </div>
             <button type="submit" class="btn-submit" @onclick="LoginAsync">Log in</button>
-
-            @if (loginFailed)
-            {
-                <div class="alert alert-danger">
-                Invalid username or PIN.
-                </div>
-            }
         }
         </div>
     </div>
