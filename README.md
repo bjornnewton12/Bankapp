@@ -2,21 +2,25 @@
 
 ## Project description
 This project is a Blazor WebAssembly project that simulates a simple banking environment.  
-Users can create, view, and manage bank accounts, perform withdrawals, deposits, and transfers, and review transaction history. Everything is stored locally in the browser using Local Storage.
+Users can:
+* Create, view, and manage bank accounts.
+* Perform withdrawals, deposits, and transfers.
+* Review transaction history.
+* Everything is stored locally in the browser using Local Storage.
 
 ## This project demonstrates:
-* Components, forms, and dependency injection  
-* Practical banking logic including account management and transaction tracking  
-* Data persistence using JSON serialization and 'IJSRuntime' for local storage access  
+* Components, forms, and dependency injection.
+* Practical banking logic including account management and transaction tracking.
+* Data persistence using JSON serialization and 'IJSRuntime' for local storage access.
 
 ## How to Use the Project
-To login, use the following username and PIN:
+### Use the following credentials to log in:
 * Username: arber
 * PIN: 27237
-Once the application is running, you can navigate through the following pages:
 
+### App Navigation
 * 🏠 Home
-  * The landing page.
+  * The landing page introducing BK Bank.
 
 * 🏦 New Account (/accounts)
   * Create a new bank account by specifying:
