@@ -70,8 +70,8 @@ BK Bank's interface uses simple HTML and CSS styling, making the logic and inter
 ## Credits
 * Developed by: bjornnewton12
 * Technologies Used:
-* Blazor WebAssembly (.NET 8)
-* C#
-* JavaScript Interop (IJSRuntime)
-* Local Storage API
-* HTML & CSS
+  * Blazor WebAssembly (.NET 8)
+  * C#
+  * JavaScript Interop (IJSRuntime)
+  * Local Storage API
+  * HTML & CSS
