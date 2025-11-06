@@ -9,9 +9,18 @@ Users can:
 * Everything is stored locally in the browser using Local Storage.
 
 ## This project demonstrates:
-* Components, forms, and dependency injection.
-* Practical banking logic including account management and transaction tracking.
-* Data persistence using JSON serialization and 'IJSRuntime' for local storage access.
+### Dependency injection
+Implemented across the app to provide services, for example AccountService, AuthenticationService and StorageService. This increases maintainability by avoiding hard-coded dependecies.
+### Local Storage via IJSRuntime
+Used for data persistence so that user's accounts and transactions remain intact after reloading the page. By accessing it through IJSRuntime it enables a safe interaction between C# and Javascript without me actually writing any Javascript.
+### JSON Serialization
+Used for storing and retrieving data in a readable way. It also simulates real-world data exchange, making this concept app somewhat mirror that of real a banking API.
+### Component-based Architecture
+BK Bank is structured into reusable Razor components and services. Each pages is responsbile for its own logic and interactions, while still relying on shared services e.g. data storage and business operations.
+### Simple Authentication
+A simple username and pin requirement demonstrates an authentication flow, without the need of a database or external API. This keeps the focus on understanding authentication management.
+### UI design
+BK Bank's interface uses simple HTML and CSS styling, making the logic and interactivity the main focus rather than a complex design system.
 
 ## How to Use the Project
 ### Use the following credentials to log in:
