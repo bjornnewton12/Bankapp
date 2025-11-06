@@ -169,6 +169,8 @@ else
         _accounts = await AccountService.GetAccounts();
         _withdrawErrorMessage = null;
         _withdrawSuccessMessage = "Successful withdraw";
+        _withdrawModel.Amount = 0;
+        StateHasChanged();
         }
         catch(Exception ex)
         {
@@ -188,6 +190,8 @@ else
         _accounts = await AccountService.GetAccounts();
         _depositErrorMessage = null;
         _depositSuccessMessage = "Successful deposit";
+        _depositModel.Amount = 0;
+        StateHasChanged();
         }
         catch (Exception ex)
         {
