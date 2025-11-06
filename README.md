@@ -23,10 +23,7 @@ Users can:
   * The landing page introducing BK Bank.
 
 * 🏦 New Account (/accounts)
-  * Create a new bank account by specifying:
-  * Name
-  * Account Type (Deposit or Savings)
-  * Starting Balance
+  * Create a new bank account by specifying Name, Account Type (Deposit or Savings), Starting Balance.
   * View all created accounts with their type, balance, and last update time.
 
 * 👤 My Accounts (/myAccounts)
@@ -46,14 +43,8 @@ Users can:
 
 * 📜 History (/history)
   * View all transactions for a selected account.
-    * Filter by:
-    * Date range
-    * Transaction type
-  * Sort by:
-    * Date
-    * Amount
-    * Transaction Type
-    * Balance After Transaction
+  * Filter by Date range and Transaction type.
+  * Sort by Date, Amount, Transaction Type and Balance After Transaction
   * All actions (create, withdraw, deposit, transfer) automatically update the local storage and persist even after reloading the browser.
 
 * 🛑Logout
