@@ -57,6 +57,7 @@
             </NavLink>
         </div>
     }
+    
         <div class="nav-item px-3">
             <a class="nav-link" href="https://learn.microsoft.com/aspnet/core/" target="_blank" rel="noopener noreferrer">
                 <span class="bi bi-info-circle" aria-hidden="true"></span> About (External link)
@@ -67,7 +68,8 @@
         @if (isLoggedIn)
         {
             <NavLink class="nav-link" @onclick="LogoutAsync">
-            <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Logout</NavLink>
+            <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Logout
+            </NavLink>
         }
         </div>
     </nav>
