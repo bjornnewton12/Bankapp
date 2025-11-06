@@ -222,7 +222,6 @@ code {
     border-collapse: collapse;
     margin-top: 1rem;
     font-size: 0.9rem;
-    
 }
 
 .accounts-table th, .accounts-table td {
@@ -233,6 +232,7 @@ code {
 
 .accounts-table th {
     font-weight: 600;
+    text-align: left;
 }
 
 .accounts-table tr {
@@ -245,6 +245,14 @@ code {
 
 .accounts-table tbody tr:hover {
     background-color:  rgba(255,255,255,0.37);
+}
+
+.accounts-table th .btn-sort {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
 }
 
 .account-item p {

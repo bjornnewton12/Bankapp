@@ -182,7 +182,7 @@ else
         if (_selectedAccount == null)
             return Enumerable.Empty<Transaction>();
 
-        // sortera lista, Datum och belopp
+        // sort list, date and amount
         var sortedList = _selectedAccount.Transactions.AsEnumerable();
         
         if (filterFromDate.HasValue)

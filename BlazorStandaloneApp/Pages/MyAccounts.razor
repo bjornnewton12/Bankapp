@@ -23,17 +23,27 @@ else
     <table class="accounts-table">
         <thead>
             <tr>
-                <th>Account name</th>
-                <th>Account type</th>
-                <th>Balance</th>
+                <th><button class="btn-sort" @onclick="() => SetSort(SortKey.Name)">
+                Name @(currentKey == SortKey.Name ? (descending ? "⯆" : "⯅") : "")
+                </button></th>
+                <th><button class="btn-sort" @onclick="() => SetSort(SortKey.AccountType)">
+                Account type @(currentKey == SortKey.AccountType ? (descending ? "⯆" : "⯅") : "")
+                </button></th>
+                <th><button class="btn-sort" @onclick="() => SetSort(SortKey.Balance)">
+                Balance @(currentKey == SortKey.Balance ? (descending ? "⯆" : "⯅") : "")
+                </button></th>
                 <th>Interest rate</th>
-                <th>Accumulated interest</th>
-                <th>Last updated</th>
+                <th><button class="btn-sort" @onclick="() => SetSort(SortKey.AccumulatedInterest)">
+                Accumulated interest @(currentKey == SortKey.AccumulatedInterest ? (descending ? "⯆" : "⯅") : "")
+                </button></th>
+                <th><button class="btn-sort" @onclick="() => SetSort(SortKey.LastUpdated)">
+                Last updated @(currentKey == SortKey.LastUpdated ? (descending ? "⯆" : "⯅") : "")
+                </button></th>
                 <th><!-- Potential remove button --></th>
             </tr>
         </thead>
         <tbody>
-        @foreach (var account in _accounts)
+        @foreach (var account in SortedAccounts())
         {
             <tr>
                 <td>@account.Name</td>
@@ -62,6 +72,20 @@ else
 @code {
     private CreateAccountModel _model = new();
     private List<BankAccount> _accounts = new();
+
+    // Start value
+    private SortKey currentKey = SortKey.Name;
+    private bool descending = false;
+
+    //Sorting keys for table
+    private enum SortKey
+    {
+        Name,
+        AccountType,
+        Balance,
+        AccumulatedInterest,
+        LastUpdated
+    }
 
     // Check if page is authenticated and load all user accounts when the page initializes
     protected override async Task OnInitializedAsync()
@@ -114,5 +138,40 @@ else
             InitialBalance = 0;
             AccountType = default;
         }
+    }
+
+    // Change the current sorting key or reverse sort order
+    private void SetSort(SortKey sortKey)
+    {
+        if (currentKey == sortKey)
+        {
+        descending = !descending;
+        }
+        else
+        {
+            currentKey = sortKey;
+            descending = true;
+        }
+    }
+
+    private IEnumerable<BankAccount> SortedAccounts()
+    {
+        // sort list, date and amount
+        var sortedList = _accounts.AsEnumerable();
+
+        sortedList = currentKey switch
+        {
+            SortKey.Name => (descending ? sortedList.OrderByDescending(t => t.Name) 
+            : sortedList.OrderBy(t => t.Name)),
+            SortKey.Balance => (descending ? sortedList.OrderByDescending(t => t.Balance) 
+            : sortedList.OrderBy(t => t.Balance)),
+            SortKey.AccumulatedInterest => (descending ? sortedList.OrderByDescending(t => t.ApplyInterest()) 
+            : sortedList.OrderBy(t => t.ApplyInterest())),
+            SortKey.LastUpdated => (descending ? sortedList.OrderByDescending(t => t.LastUpdated) 
+            : sortedList.OrderBy(t => t.LastUpdated)),
+
+            _ => sortedList
+        };
+        return sortedList;
     }
 }
