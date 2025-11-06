@@ -8,8 +8,7 @@
 
 @* 
 Summary:
-Displays transaction history with sorting and filtering options 
-(by date range, transaction type, and amount).
+Displays transaction history with sorting and filtering options (by date range, transaction type, and amount).
 *@
 
 <PageTitle>History</PageTitle>
@@ -24,6 +23,7 @@ else if (_accounts.Count == 0)
 {
     <p>No accounts</p>
 }
+<!-- History table -->
 else
 {
     <div class="form-row">
@@ -62,6 +62,7 @@ else
     {
         <p>No transactions</p>
     }
+    <!-- Sort table -->
     else
     {
         <table class="accounts-table">

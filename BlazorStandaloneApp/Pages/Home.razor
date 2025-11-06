@@ -12,7 +12,7 @@ Home page with login
 
 <div class="home-page">
     <div class="header">
-        <img src="/images/pexels-olly-787472.jpg" alt="BK Bank Home" />
+        <img src="/images/pexels-pixabay-46160.jpg"alt="BK Bank Home" />
         <h1 class="hero-title">Welcome to BK Bank</h1>
     </div>
 
@@ -27,22 +27,27 @@ Home page with login
             Because your money should work for you — not the other way around.
         </p>
         <div>
+
+        <!-- Login (Only available when logged out) -->
         @if (!isLoggedIn)
         {
             <h2>Log in</h2>
 
-            <div class="form-row">
+            <div class="login-row">
                 <label>Username</label>
                 <input @bind="username"/>
+            </div>
+            <div class="login-row">
                 <label>PIN</label>
                 <input @bind="pin"/>
-                <button type="submit" class="btn-submit" @onclick="LoginAsync">Log in</button>
             </div>
-            <p></p>    
-        
-        @if (loginFailed)
+            <button type="submit" class="btn-submit" @onclick="LoginAsync">Log in</button>
+
+            @if (loginFailed)
             {
-                <p>Invalid username or PIN.</p>
+                <div class="alert alert-danger">
+                Invalid username or PIN.
+                </div>
             }
         }
         </div>
@@ -56,7 +61,10 @@ Home page with login
     private bool isLoggedIn;
     private bool loginFailed;
     private User? currentUser;
+    private string? _errorMessage;
 
+    // Check if page is authenticated, load user data if logged in, and subscribe to authentication state changes
+  
     protected override async Task OnInitializedAsync()
     {
         isLoggedIn = await AuthenticationService.IsLoggedInAsync();
@@ -67,6 +75,7 @@ Home page with login
         AuthenticationService.OnAuthStateChanged += AuthStateChanged;
     }
 
+    // Attempt to log in using provided username and PIN, and update authentication state based on result
     private async Task LoginAsync()
     {
         loginFailed = false;
@@ -83,6 +92,7 @@ Home page with login
         }
     }
 
+   // Update authentication and user state when login status changes
     private async void AuthStateChanged()
     {
         isLoggedIn = await AuthenticationService.IsLoggedInAsync();
@@ -97,6 +107,7 @@ Home page with login
         await InvokeAsync(StateHasChanged);
     }
 
+    // Unsubscribe from authentication state change events when the component is disposed
     public void Dispose()
     {
         AuthenticationService.OnAuthStateChanged -= AuthStateChanged;

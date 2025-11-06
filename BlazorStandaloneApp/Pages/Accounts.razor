@@ -7,14 +7,13 @@
 
 @* 
 Summary:
-Page for creating new bank accounts and displaying a list
-of existing accounts with their balances.
+Page for creating new bank accounts and displaying a list of existing accounts with their balances.
 *@
 
 <PageTitle>New account</PageTitle>
 
 <h1>New account</h1>
-
+<!-- Create account form -->
 <EditForm Model="_model" OnValidSubmit="CreateAccountAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
