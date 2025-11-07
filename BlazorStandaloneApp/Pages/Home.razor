@@ -63,7 +63,6 @@ Home page with login
     private User? currentUser;
 
     // Check if page is authenticated, load user data if logged in, and subscribe to authentication state changes
-  
     protected override async Task OnInitializedAsync()
     {
         isLoggedIn = await AuthenticationService.IsLoggedInAsync();
