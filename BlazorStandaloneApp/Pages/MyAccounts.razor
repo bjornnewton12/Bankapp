@@ -111,18 +111,12 @@ else
         }
     }
 
-    // Remove an account (only possible if balance is zero)
+    // Remove an account
     private async Task RemoveAccount(IBankAccount account)
     {
-        try
-        {
             await AccountService.DeleteAccount(account);
             _accounts = await AccountService.GetAccounts();
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-        }
+            Console.WriteLine("MyAccounts INFO: Removed account");
     }
 
     // Model for handling new account creation (shared structure)
@@ -156,7 +150,7 @@ else
 
     private IEnumerable<BankAccount> SortedAccounts()
     {
-        // sort list, date and amount
+        // Sort list
         var sortedList = _accounts.AsEnumerable();
 
         sortedList = currentKey switch

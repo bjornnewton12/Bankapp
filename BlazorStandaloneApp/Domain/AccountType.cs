@@ -9,4 +9,3 @@ public enum AccountType
     Savings,
     Deposit
 }
-

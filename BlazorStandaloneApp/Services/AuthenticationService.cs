@@ -13,7 +13,6 @@ public class AuthenticationService : IAuthenticationService
     private readonly IStorageService _storageService;
     private string UserKey = "CurrentUser";
     private string LoggedInKey = "isLoggedIn";
-
     private readonly User _defaultUser = new("arber", "27237");
     public event Action? OnAuthStateChanged;
 

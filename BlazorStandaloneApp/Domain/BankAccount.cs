@@ -24,7 +24,7 @@ public class BankAccount : IBankAccount
         return Transactions;
     }
 
-    // Constructor for creating a new bank account with specified name, type, and starting balance.
+    // Constructor for creating a new bank account with specified name, type, starting balance and last updated.
     public BankAccount(string name, AccountType accountType, decimal balance)
     {
         Name = name;
@@ -33,9 +33,7 @@ public class BankAccount : IBankAccount
         LastUpdated = DateTime.Now;
     }
 
-    /// <summary>
-    /// JSON deserialization when loading existing accounts from storage.
-    /// </summary>
+    // JSON deserialization when loading existing accounts from storage.
     [JsonConstructor]
     public BankAccount(Guid id, string name, AccountType accountType, decimal balance, DateTime lastUpdated, List<Transaction> transactions) // Add , ExpenseCategory expenseCategory ?
     {
@@ -47,10 +45,7 @@ public class BankAccount : IBankAccount
         Transactions = transactions ?? new List<Transaction>();
     }
 
-    /// <summary>
-    /// Deposit specific amount to account balance
-    /// </summary>
-    /// <param name="amount"></param>
+    // Deposit specific amount to account balance
     public void Deposit(decimal amount)
     {
         if (amount <= 0)
@@ -72,10 +67,7 @@ public class BankAccount : IBankAccount
         });
     }
 
-    /// <summary>
-    /// Withdraw specific amount from account balance
-    /// </summary>
-    /// <param name="amount"></param>
+    // Withdraw specific amount from account balance
     public void Withdraw(decimal amount, ExpenseCategory category)
     {
         if (amount <= 0)
@@ -104,11 +96,7 @@ public class BankAccount : IBankAccount
         });
     }
 
-    /// <summary>
-    /// Transfers from specific account to specific account
-    /// </summary>
-    /// <param name="toAccount"></param>
-    /// <param name="amount"></param>
+    // Transfers from specific account to specific account
     public void TransferTo(BankAccount toAccount, decimal amount)
     {
         if (amount <= 0)
@@ -150,10 +138,7 @@ public class BankAccount : IBankAccount
         });
     }
     
-    /// <summary>
-    /// Apply interest to accounts
-    /// </summary>
-    /// <returns></returns>
+    // Apply interest to accounts
     public decimal ApplyInterest()
     {
         if (AccountType != AccountType.Savings)
