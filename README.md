@@ -19,8 +19,6 @@ Used for storing and retrieving data in a readable way. It also simulates real-w
 BK Bank is structured into reusable Razor components and services. Each pages is responsbile for its own logic and interactions, while still relying on shared services e.g. data storage and business operations.
 ### Simple Authentication
 A simple username and pin requirement demonstrates an authentication flow, without the need of a database or external API. This keeps the focus on understanding authentication management.
-### UI design
-BK Bank's interface uses simple HTML and CSS styling, making the logic and interactivity the main focus rather than a complex design system.
 
 ## How to Use the Project
 ### Use the following credentials to log in:
